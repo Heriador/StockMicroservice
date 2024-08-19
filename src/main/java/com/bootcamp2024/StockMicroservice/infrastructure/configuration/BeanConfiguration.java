@@ -1,12 +1,12 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration;
 
 
-import com.bootcamp2024.StockMicroservice.domain.ICategoriePersistencePort;
-import com.bootcamp2024.StockMicroservice.domain.ICategorieServicePort;
-import com.bootcamp2024.StockMicroservice.domain.usecases.CategorieUseCases;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.CategorieJpaAdapter;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.Mapper.CategorieEntityMapper;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.repository.ICategorieRepository;
+import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
+import com.bootcamp2024.StockMicroservice.domain.usecases.CategoryUseCases;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.CategoryAdapter;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,18 +15,18 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class BeanConfiguration {
 
-    private final ICategorieRepository categorieRepository;
-    private final CategorieEntityMapper categorieEntityMapper;
+    private final ICategoryRepository categoryRepository;
+    private final CategoryEntityMapper categoryEntityMapper;
 
     @Bean
-    public ICategoriePersistencePort categoriePersistencePort(){
-        return new CategorieJpaAdapter(categorieRepository, categorieEntityMapper);
+    public ICategoryPersistencePort categoryPersistencePort(){
+        return new CategoryAdapter(categoryRepository, categoryEntityMapper);
     }
 
 
     @Bean
-    public ICategorieServicePort categorieServicePort(){
-        return new CategorieUseCases(categoriePersistencePort());
+    public ICategoryServicePort categoryServicePort(){
+        return new CategoryUseCases(categoryPersistencePort());
     }
 
 }
