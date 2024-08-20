@@ -8,12 +8,11 @@ import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundEx
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.CategoryEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryAdapter implements ICategoryPersistencePort {
 
     private final ICategoryRepository categoryRepository;

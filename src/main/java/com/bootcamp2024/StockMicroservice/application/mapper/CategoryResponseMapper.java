@@ -17,14 +17,6 @@ public interface CategoryResponseMapper {
     CategoryResponse toResponse(Category category);
 
 
-    default List<CategoryResponse> toResponseList(List<Category> categoryList){
-        return categoryList.stream()
-                .map(category -> {
-                    CategoryResponse categoryResponse = new CategoryResponse();
-                    categoryResponse.setName(category.getName());
-                    categoryResponse.setDescription(category.getDescription());
-                    return categoryResponse;
-                }).toList();
-    }
+    List<CategoryResponse> toResponseList(List<Category> categoryList);
 
 }

@@ -24,6 +24,7 @@ public class CategoryHandler implements ICategoryHandler {
     @Override
     public void createCategory(AddCategory addCategory) {
         Category category = categoryRequestMapper.addCategoryToCategory(addCategory);
+        categoryServicePort.saveCategory(category);
     }
 
     @Override

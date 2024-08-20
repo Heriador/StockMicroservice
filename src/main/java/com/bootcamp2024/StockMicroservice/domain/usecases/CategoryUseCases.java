@@ -8,25 +8,25 @@ import java.util.List;
 
 public class CategoryUseCases implements ICategoryServicePort {
 
-    private final ICategoryPersistencePort categoriePersistencePort;
+    private final ICategoryPersistencePort categoryPersistencePort;
 
-    public CategoryUseCases(ICategoryPersistencePort categoriePersistencePort) {
-        this.categoriePersistencePort = categoriePersistencePort;
+    public CategoryUseCases(ICategoryPersistencePort categoryPersistencePort) {
+        this.categoryPersistencePort = categoryPersistencePort;
     }
 
     @Override
     public void saveCategory(Category category) {
-        categoriePersistencePort.saveCategory(category);
+        categoryPersistencePort.saveCategory(category);
     }
 
     @Override
     public List<Category> getAllCategories() {
-        return categoriePersistencePort.getAllCategories();
+        return categoryPersistencePort.getAllCategories();
     }
 
     @Override
     public Category getCategory(String categoryName) {
-        return categoriePersistencePort.getCategory(categoryName);
+        return categoryPersistencePort.getCategory(categoryName);
     }
 
 }

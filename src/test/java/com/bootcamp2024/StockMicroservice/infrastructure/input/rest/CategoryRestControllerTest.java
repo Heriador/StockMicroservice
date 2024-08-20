@@ -1,51 +1,87 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
-
-import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
-import com.bootcamp2024.StockMicroservice.domain.model.Category;
+import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.handler.ICategoryHandler;
+import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryAlreadyExistsException;
+import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@WebMvcTest(CategoryRestController.class)
 class CategoryRestControllerTest {
 
+    ICategoryHandler categoryHandler = Mockito.mock(ICategoryHandler.class);
+
     @Autowired
-    private MockMvc mockMvc;
+    CategoryResponse categoryResponseMock;
 
-    @MockBean
-    private ICategoryPersistencePort categoryPersistencePort;
+    @Autowired
+    AddCategory addCategory;
 
-    private Category category;
+    @Autowired
+    CategoryRestController categoryRestController = new CategoryRestController(categoryHandler);
+
 
     @BeforeEach
-    void setUp() {
-        category = new Category(1L,"laptos","para entrar a internet");
+    void setup(){
+        CategoryResponse category = CategoryResponse.builder()
+                                        .id(1L)
+                                        .name("computadoras")
+                                        .description("para entrar a internet")
+                                        .build();
+        addCategory = AddCategory.builder()
+                                    .name(category.getName())
+                                    .description(category.getDescription())
+                                    .build();
 
+        Mockito.when(categoryHandler.getCategory("computadoras")).thenReturn(category);
 
     }
 
     @Test
-    public  void saveCategory() throws  Exception{
-        Category postCategory = new Category(1L,"laptos","para entrar a internet");
+    @DisplayName("Save values should return nothing")
+    void saveCategory(){
+        Mockito.doNothing().when(categoryHandler).createCategory(addCategory);
 
-        Mockito.when(categoryPersistencePort.saveCategory(postCategory)).thenReturn(category);
-        mockMvc.perform(MockMvcRequestBuilders.post("/").contentType(MediaType.APPLICATION_JSON)
-                .content("\n"+
-                        "\"name\":\"laptos\",\n"+
-                        "\"description\":\"para entrar a internet\",\n"+
-                        "}"))
-                .andExpect(MockMvcResultMatchers.status().isCreated());
+        ResponseEntity<Void> response = categoryRestController.createCategory(addCategory);
+        assertEquals(HttpStatus.CREATED,response.getStatusCode());
+
+        Mockito.verify(categoryHandler).createCategory(addCategory);
+
     }
+
+    @Test
+    void saveCategoryShouldFailed() throws CategoryAlreadyExistsException {
+        Mockito.doThrow(CategoryAlreadyExistsException.class).when(categoryHandler).createCategory(addCategory);
+
+        assertThrows(CategoryAlreadyExistsException.class, () -> categoryRestController.createCategory(addCategory));
+    }
+
+    @Test
+    void getCategory(){
+
+        categoryResponseMock = categoryRestController.getCategory("computadoras").getBody();
+        System.out.println(categoryResponseMock);
+        assertEquals("computadoras",categoryResponseMock.getName());
+    }
+
+    @Test
+    void getCategoryShouldFailed() throws CategoryNotFoundException{
+        Mockito.doThrow(CategoryNotFoundException.class).when(categoryHandler).getCategory("computadoras");
+
+        assertThrows(CategoryNotFoundException.class, () -> categoryRestController.getCategory("computadoras"));
+    }
+
+
+
+
 
 
 }

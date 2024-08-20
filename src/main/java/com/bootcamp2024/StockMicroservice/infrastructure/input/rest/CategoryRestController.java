@@ -24,13 +24,12 @@ public class CategoryRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAllCategories(@RequestParam Integer page,
-                                                                   @RequestParam Integer size){
+    public ResponseEntity<List<CategoryResponse>> getAllCategories(){
         return ResponseEntity.ok(categoryHandler.getAllcategories());
     }
 
     @GetMapping("/{categoryName}")
-    public ResponseEntity<CategoryResponse> getCategories(@PathVariable String categoryName){
+    public ResponseEntity<CategoryResponse> getCategory(@PathVariable String categoryName){
         return ResponseEntity.ok(categoryHandler.getCategory(categoryName));
     }
 
