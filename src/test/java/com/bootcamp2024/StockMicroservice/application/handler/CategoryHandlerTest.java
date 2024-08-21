@@ -1,22 +1,26 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
 import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMapper;
 import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
+import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.CategoryAdapter;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.CategoryEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
 import org.h2.command.dml.MergeUsing;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -24,39 +28,59 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class CategoryHandlerTest {
 
-    @Mock
-    private ICategoryRepository categoryRepository;
-    @Autowired
-    private CategoryEntityMapper categoryEntityMapper;
+    private final ICategoryServicePort categoryServicePort = Mockito.mock(ICategoryServicePort.class);
 
-    @InjectMocks
-    @Autowired
-    private CategoryAdapter categoryAdapter;
+    private final CategoryRequestMapper categoryRequestMapper = Mockito.mock(CategoryRequestMapper.class);
+
+    private final CategoryResponseMapper categoryResponseMapper = Mockito.mock(CategoryResponseMapper.class);
 
     @Autowired
-    private ICategoryServicePort categoryServicePort;
-    @Autowired
-    private CategoryRequestMapper categoryRequestMapper;
-    @Autowired
-    private CategoryResponseMapper categoryResponseMapper;
+    private final CategoryHandler categoryHandler = new CategoryHandler(categoryServicePort, categoryRequestMapper, categoryResponseMapper);
 
-    @Autowired
-    private ICategoryHandler categoryHandler;
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
-    void CategoryHandler_CreateCategory_ReturnNothing(){
+    void createCategory() {
         AddCategory addCategory = AddCategory.builder().name("computadoras").description("para entrar a internet").build();
-        CategoryEntity categoryEntity = CategoryEntity.builder().id(1L).name("computadoras").description("para entrar a internet").build();
-
-        when(categoryRepository.save(Mockito.any(CategoryEntity.class))).thenReturn(categoryEntity);
+        Category category = new Category(null,"computadoras", "para entrar a internet");
+        when(categoryRequestMapper.addCategoryToCategory(Mockito.any(AddCategory.class))).thenReturn(category);
+        doNothing().when(categoryServicePort).saveCategory(category);
 
         categoryHandler.createCategory(addCategory);
 
-
-        verify(categoryHandler).createCategory(addCategory);
-
-
-
+//        verify(categoryRequestMapper, times(1)).addCategoryToCategory(addCategory);
+        verify(categoryServicePort, times(1)).saveCategory(category);
     }
 
+//    @Test
+//    void getAllCategories() {
+//        List<Category> categories = Arrays.asList(new Category(), new Category());
+//        List<CategoryResponse> categoryResponses = Arrays.asList(new CategoryResponse(), new CategoryResponse());
+//        when(categoryServicePort.getAllCategories()).thenReturn(categories);
+//        when(categoryResponseMapper.toResponseList(categories)).thenReturn(categoryResponses);
+//
+//        List<CategoryResponse> result = categoryHandler.getAllcategories();
+//
+//        assertEquals(2, result.size());
+//        verify(categoryServicePort, times(1)).getAllCategories();
+//        verify(categoryResponseMapper, times(1)).toResponseList(categories);
+//    }
+
+    @Test
+    void getCategory() {
+        Category category = new Category(1L,"computadoras","para entrar a internet");
+        CategoryResponse categoryResponse = CategoryResponse.builder().id(1L).name("computadoras").description("para entrar a internet").build();
+
+        when(categoryServicePort.getCategory("computadoras")).thenReturn(category);
+        when(categoryResponseMapper.toResponse(category)).thenReturn(categoryResponse);
+
+        CategoryResponse result = categoryHandler.getCategory("computadoras");
+
+        assertEquals(categoryResponse, result);
+        verify(categoryServicePort, times(1)).getCategory("computadoras");
+        verify(categoryResponseMapper, times(1)).toResponse(category);
+    }
 }
