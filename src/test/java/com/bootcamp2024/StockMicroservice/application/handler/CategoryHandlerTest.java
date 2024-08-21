@@ -4,6 +4,7 @@ import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
 import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMapper;
+import com.bootcamp2024.StockMicroservice.application.mapper.GetAllCategoriesMapper;
 import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
@@ -34,8 +35,10 @@ class CategoryHandlerTest {
 
     private final CategoryResponseMapper categoryResponseMapper = Mockito.mock(CategoryResponseMapper.class);
 
+    private final GetAllCategoriesMapper getAllCategoriesMapper = Mockito.mock(GetAllCategoriesMapper.class);
+
     @Autowired
-    private final CategoryHandler categoryHandler = new CategoryHandler(categoryServicePort, categoryRequestMapper, categoryResponseMapper);
+    private final CategoryHandler categoryHandler = new CategoryHandler(categoryServicePort, categoryRequestMapper, categoryResponseMapper, getAllCategoriesMapper);
 
     @BeforeEach
     void setUp() {

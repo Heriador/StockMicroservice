@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 class CategoryRestControllerTest {
 
     ICategoryHandler categoryHandler = Mockito.mock(ICategoryHandler.class);

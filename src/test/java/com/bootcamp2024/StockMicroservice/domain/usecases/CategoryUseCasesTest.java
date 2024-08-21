@@ -27,7 +27,7 @@ class CategoryUseCasesTest {
     }
 
     @Test
-    void saveCategory() {
+    void saveCategoryShouldPass() {
         Category category = new Category(null,"computadoras","para entrar a internet");
         categoryUseCases.saveCategory(category);
         verify(categoryPersistencePort, times(1)).saveCategory(category);

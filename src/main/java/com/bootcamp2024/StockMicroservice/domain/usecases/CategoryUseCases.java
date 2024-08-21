@@ -2,9 +2,12 @@ package com.bootcamp2024.StockMicroservice.domain.usecases;
 
 import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
+import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
+import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 
-import java.util.List;
+
 
 public class CategoryUseCases implements ICategoryServicePort {
 
@@ -16,12 +19,18 @@ public class CategoryUseCases implements ICategoryServicePort {
 
     @Override
     public void saveCategory(Category category) {
+        if(category.getName().trim().isEmpty()){
+            throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
+        }
+        if(category.getDescription().trim().isEmpty()){
+            throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
+        }
         categoryPersistencePort.saveCategory(category);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryPersistencePort.getAllCategories();
+    public PaginationCustom getAllCategories(int page, int size) {
+        return categoryPersistencePort.getAllCategories(page, size);
     }
 
     @Override

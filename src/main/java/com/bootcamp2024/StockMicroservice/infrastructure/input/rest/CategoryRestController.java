@@ -2,6 +2,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
 import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.GetAllCategories;
 import com.bootcamp2024.StockMicroservice.application.handler.ICategoryHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,8 +25,11 @@ public class CategoryRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAllCategories(){
-        return ResponseEntity.ok(categoryHandler.getAllcategories());
+    public ResponseEntity<GetAllCategories> getAllCategories(
+            @RequestParam(value = "page", defaultValue = "0", required = false) int page,
+            @RequestParam(value = "size", defaultValue = "10", required = false) int size
+    ){
+        return ResponseEntity.ok(categoryHandler.getAllcategories(page, size));
     }
 
     @GetMapping("/{categoryName}")
