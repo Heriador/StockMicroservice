@@ -1,11 +1,16 @@
 package com.bootcamp2024.StockMicroservice.domain.usecases;
 
 import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
+import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryAlreadyExistsException;
+import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 
@@ -34,6 +39,13 @@ class CategoryUseCasesTest {
     }
 
     @Test
+    void saveCategoryShouldThrowCategoryAlreadyExistsException() {
+        Category category = new Category(null, "computadoras", "para entrar a internet");
+        doThrow(CategoryAlreadyExistsException.class).when(categoryPersistencePort).saveCategory(category);
+        assertThrows(CategoryAlreadyExistsException.class, () -> categoryUseCases.saveCategory(category));
+    }
+
+    @Test
     void getCategory() {
         Category category = new Category(null,"computadoras","para entrar a internet");
         when(categoryPersistencePort.getCategory("computadoras")).thenReturn(category);
@@ -41,5 +53,21 @@ class CategoryUseCasesTest {
         Category result = categoryUseCases.getCategory("computadoras");
         assertEquals(category, result);
         verify(categoryPersistencePort, times(1)).getCategory("computadoras");
+    }
+
+    @Test
+    void getAllCategories() {
+        categoryUseCases.getAllCategories(0, 10);
+
+        when(categoryPersistencePort.getAllCategories(0, 10)).thenReturn(Mockito.mock(PaginationCustom.class));
+
+        verify(categoryPersistencePort, times(1)).getAllCategories(0, 10);
+    }
+
+    @Test
+    void getAllCategoriesShouldReturnEmptyList() {
+        doThrow(NoDataFoundException.class).when(categoryPersistencePort).getAllCategories(0, 10);
+
+        assertThrows(NoDataFoundException.class, () -> categoryUseCases.getAllCategories(0, 10));
     }
 }
