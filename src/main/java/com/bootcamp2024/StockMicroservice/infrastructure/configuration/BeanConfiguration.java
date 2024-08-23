@@ -7,6 +7,8 @@ import com.bootcamp2024.StockMicroservice.domain.usecases.CategoryUseCases;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.CategoryAdapter;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +29,15 @@ public class BeanConfiguration {
     @Bean
     public ICategoryServicePort categoryServicePort(){
         return new CategoryUseCases(categoryPersistencePort());
+    }
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Stock Microservice")
+                        .version("1.0")
+                        .description("Stock Microservice API"));
     }
 
 }
