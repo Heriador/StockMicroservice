@@ -2,9 +2,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.configuration.exceptio
 
 import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.infrastructure.configuration.Constants;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryAlreadyExistsException;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryNotFoundException;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
+import com.bootcamp2024.StockMicroservice.infrastructure.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 
@@ -43,13 +41,25 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public  ResponseEntity<ExceptionResponse> handleCategorieNotFoundException(CategoryNotFoundException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.CATEGORY_NOT_FOUND_EXCEPTION_MESSAGE,e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
     }
+
+    @ExceptionHandler(BrandAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> hanldeBrandAlreadyExistsException(BrandNotFoundException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(String.format(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getMessage()),HttpStatus.CONFLICT.toString(),LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(BrandNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleBrandNotFoundException(BrandNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.BRAND_NOT_FOUND_EXCEPTION_MESSAGE, e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
+    }
+
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException e){
         Map<String,Object> errors = new HashMap<>();
 
-        e.getConstraintViolations().forEach(error -> {
-            errors.put(error.getPropertyPath().toString(), error.getMessage());
-        });
+        e.getConstraintViolations().forEach(error ->
+            errors.put(error.getPropertyPath().toString(), error.getMessage())
+        );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }

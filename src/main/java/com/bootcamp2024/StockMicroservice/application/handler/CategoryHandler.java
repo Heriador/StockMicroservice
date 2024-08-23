@@ -6,14 +6,12 @@ import com.bootcamp2024.StockMicroservice.application.dto.GetAllCategories;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.GetAllCategoriesMapper;
-import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
+import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

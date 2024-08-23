@@ -1,7 +1,7 @@
 package com.bootcamp2024.StockMicroservice.domain.usecases;
 
-import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
-import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
+import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
