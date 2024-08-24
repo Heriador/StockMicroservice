@@ -1,7 +1,7 @@
 package com.bootcamp2024.StockMicroservice.application.mapper;
 
 import com.bootcamp2024.StockMicroservice.application.dto.GetAllCategories;
-import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
+import com.bootcamp2024.StockMicroservice.domain.model.CategoryPaginationCustom;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -19,6 +19,6 @@ public interface GetAllCategoriesMapper {
     @Mapping(source = "totalElements", target = "totalElements")
     @Mapping(source = "totalPages", target = "totalPages")
     @Mapping(source = "last", target = "last")
-    GetAllCategories paginationCustomToGetAllCategories(PaginationCustom paginationCustom);
+    GetAllCategories paginationCustomToGetAllCategories(CategoryPaginationCustom categoryPaginationCustom);
 
 }
