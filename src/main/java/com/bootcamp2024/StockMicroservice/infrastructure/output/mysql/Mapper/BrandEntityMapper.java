@@ -7,6 +7,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring",
     unmappedSourcePolicy = ReportingPolicy.IGNORE,
     unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -18,4 +20,5 @@ public interface BrandEntityMapper {
     BrandEntity brandToBrandEntity(Brand brand);
     Brand brandEntityToBrand(BrandEntity brandEntity);
 
+    List<Brand> toBrandList(List<BrandEntity> brandEntityList);
 }

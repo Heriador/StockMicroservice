@@ -2,7 +2,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 
 import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
-import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
+import com.bootcamp2024.StockMicroservice.domain.model.CategoryPaginationCustom;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryNotFoundException;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
@@ -34,8 +34,10 @@ public class CategoryAdapter implements ICategoryPersistencePort {
     }
 
     @Override
-    public PaginationCustom getAllCategories(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public CategoryPaginationCustom getAllCategories(int page, int size, boolean ord) {
+
+        Sort sort = ord ? Sort.by("name").ascending() : Sort.by("name").descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<CategoryEntity> categoryEntityPage = categoryRepository.findAll(pageable);
 
@@ -45,7 +47,7 @@ public class CategoryAdapter implements ICategoryPersistencePort {
 
         List<CategoryEntity> categoryEntityList = categoryEntityPage.getContent();
 
-        PaginationCustom pagination = new PaginationCustom();
+        CategoryPaginationCustom pagination = new CategoryPaginationCustom();
         pagination.setContent(categoryEntityMapper.toCategoryList(categoryEntityList));
         pagination.setPageNumber(categoryEntityPage.getNumber());
         pagination.setPageSize(categoryEntityPage.getSize());

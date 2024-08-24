@@ -4,7 +4,7 @@ import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
-import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
+import com.bootcamp2024.StockMicroservice.domain.model.CategoryPaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 
 
@@ -29,8 +29,8 @@ public class CategoryUseCases implements ICategoryServicePort {
     }
 
     @Override
-    public PaginationCustom getAllCategories(int page, int size) {
-        return categoryPersistencePort.getAllCategories(page, size);
+    public CategoryPaginationCustom getAllCategories(int page, int size, boolean ord) {
+        return categoryPersistencePort.getAllCategories(page, size, ord);
     }
 
     @Override

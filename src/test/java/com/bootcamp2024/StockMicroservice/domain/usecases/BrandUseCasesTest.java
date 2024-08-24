@@ -2,14 +2,17 @@ package com.bootcamp2024.StockMicroservice.domain.usecases;
 
 import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
+import com.bootcamp2024.StockMicroservice.domain.model.BrandPaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IBrandPersistencePort;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.BrandAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.BrandNotFoundException;
+import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.*;
@@ -90,6 +93,26 @@ class BrandUseCasesTest {
         doThrow(BrandNotFoundException.class).when(brandPersistencePort).getBrand("LG");
 
         assertThrows(BrandNotFoundException.class, ()->brandUseCases.getBrand("LG"));
+    }
+
+
+    @Test
+    @DisplayName("Calling useCase getAllBrands should pass and return a pagination response object")
+    void getAllBrandsShouldPass(){
+        brandUseCases.getAllaBrands(0,10,true);
+
+        when(brandPersistencePort.getAllBrands(0,10,true)).thenReturn(Mockito.mock(BrandPaginationCustom.class));
+
+        verify(brandPersistencePort, times(1)).getAllBrands(0,10,true);
+
+    }
+
+    @Test
+    @DisplayName("Calling useCase getAllBrands Should return EmptyList and Throw NoDataFoundException")
+    void getAllCategoriesShouldReturnEmptyList() {
+        doThrow(NoDataFoundException.class).when(brandPersistencePort).getAllBrands(0, 10,false);
+
+        assertThrows(NoDataFoundException.class, () -> brandPersistencePort.getAllBrands(0, 10,false));
     }
 
 

@@ -8,7 +8,7 @@ import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMap
 import com.bootcamp2024.StockMicroservice.application.mapper.GetAllCategoriesMapper;
 import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
-import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
+import com.bootcamp2024.StockMicroservice.domain.model.CategoryPaginationCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,12 +30,12 @@ public class CategoryHandler implements ICategoryHandler {
     }
 
     @Override
-    public GetAllCategories getAllcategories(int page, int size) {
+    public GetAllCategories getAllcategories(int page, int size, boolean ord) {
 
-        PaginationCustom paginationCustom = categoryServicePort.getAllCategories(page, size);
+        CategoryPaginationCustom categoryPaginationCustom = categoryServicePort.getAllCategories(page, size, ord);
 
 
-        return getAllCategoriesMapper.paginationCustomToGetAllCategories(paginationCustom);
+        return getAllCategoriesMapper.paginationCustomToGetAllCategories(categoryPaginationCustom);
     }
 
     @Override
