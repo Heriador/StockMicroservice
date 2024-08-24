@@ -6,6 +6,7 @@ import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,6 +32,7 @@ class CategoryUseCasesTest {
     }
 
     @Test
+    @DisplayName("Calling useCase saveCategory Should pass")
     void saveCategoryShouldPass() {
         Category category = new Category(null,"computadoras","para entrar a internet");
         categoryUseCases.saveCategory(category);
@@ -38,6 +40,7 @@ class CategoryUseCasesTest {
     }
 
     @Test
+    @DisplayName("Calling useCase saveCategory should throw CategoryAlreadyExistsException")
     void saveCategoryShouldThrowCategoryAlreadyExistsException() {
         Category category = new Category(null, "computadoras", "para entrar a internet");
         doThrow(CategoryAlreadyExistsException.class).when(categoryPersistencePort).saveCategory(category);
@@ -45,6 +48,7 @@ class CategoryUseCasesTest {
     }
 
     @Test
+    @DisplayName("Calling useCase getCategory Should pass and return the same object send in the mock")
     void getCategory() {
         Category category = new Category(null,"computadoras","para entrar a internet");
         when(categoryPersistencePort.getCategory("computadoras")).thenReturn(category);
@@ -55,7 +59,8 @@ class CategoryUseCasesTest {
     }
 
     @Test
-    void getAllCategories() {
+    @DisplayName("Calling useCase getAllCategories Should pass and return a paginationCustom Object")
+    void getAllCategoriesShouldPass() {
         categoryUseCases.getAllCategories(0, 10);
 
         when(categoryPersistencePort.getAllCategories(0, 10)).thenReturn(Mockito.mock(PaginationCustom.class));
@@ -64,6 +69,7 @@ class CategoryUseCasesTest {
     }
 
     @Test
+    @DisplayName("Calling useCase getAllCategories Should return EmptyList and Throw NoDataFoundException")
     void getAllCategoriesShouldReturnEmptyList() {
         doThrow(NoDataFoundException.class).when(categoryPersistencePort).getAllCategories(0, 10);
 
