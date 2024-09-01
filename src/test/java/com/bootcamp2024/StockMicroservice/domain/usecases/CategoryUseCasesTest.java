@@ -1,10 +1,9 @@
 package com.bootcamp2024.StockMicroservice.domain.usecases;
 
-import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
-import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
+import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryAlreadyExistsException;
+import com.bootcamp2024.StockMicroservice.domain.exception.CategoryAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

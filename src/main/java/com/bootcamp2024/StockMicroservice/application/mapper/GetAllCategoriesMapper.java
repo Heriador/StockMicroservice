@@ -1,6 +1,6 @@
 package com.bootcamp2024.StockMicroservice.application.mapper;
 
-import com.bootcamp2024.StockMicroservice.application.dto.GetAllCategories;
+import com.bootcamp2024.StockMicroservice.application.dto.response.GetAllCategories;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

@@ -1,17 +1,19 @@
-package com.bootcamp2024.StockMicroservice.domain;
+package com.bootcamp2024.StockMicroservice.domain.spi;
 
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
-import org.springframework.data.domain.Page;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface ICategoryServicePort {
+
+public interface ICategoryPersistencePort {
+
     void saveCategory(Category category);
 
     PaginationCustom getAllCategories(int page, int size);
 
-    Category getCategory(String categoryName);
+    Optional<Category> findByName(String categoryName);
 
+    Optional<Category> getCategory(Long categoryId);
 
 }

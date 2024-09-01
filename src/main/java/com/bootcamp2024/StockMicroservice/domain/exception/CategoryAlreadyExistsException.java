@@ -1,4 +1,4 @@
-package com.bootcamp2024.StockMicroservice.infrastructure.exception;
+package com.bootcamp2024.StockMicroservice.domain.exception;
 
 public class CategoryAlreadyExistsException extends RuntimeException{
     public CategoryAlreadyExistsException() {

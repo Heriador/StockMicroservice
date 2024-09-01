@@ -1,4 +1,4 @@
-package com.bootcamp2024.StockMicroservice.application.dto;
+package com.bootcamp2024.StockMicroservice.application.dto.response;
 
 
 import lombok.Builder;

@@ -1,10 +1,10 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration;
 
 
-import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
-import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
+import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.usecases.CategoryUseCases;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.CategoryAdapter;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters.CategoryAdapter;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
 import io.swagger.v3.oas.models.OpenAPI;

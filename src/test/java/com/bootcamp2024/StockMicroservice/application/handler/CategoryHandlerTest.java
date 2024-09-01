@@ -1,27 +1,18 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
-import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
-import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.GetAllCategoriesMapper;
-import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
-import com.bootcamp2024.StockMicroservice.domain.ICategoryServicePort;
+import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.CategoryAdapter;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.CategoryEntity;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
-import org.h2.command.dml.MergeUsing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

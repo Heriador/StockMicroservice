@@ -1,10 +1,8 @@
-package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql;
+package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 
-import com.bootcamp2024.StockMicroservice.domain.ICategoryPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryAlreadyExistsException;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.CategoryNotFoundException;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.CategoryEntity;
@@ -14,6 +12,7 @@ import org.springframework.data.domain.*;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class CategoryAdapter implements ICategoryPersistencePort {
@@ -23,14 +22,7 @@ public class CategoryAdapter implements ICategoryPersistencePort {
 
     @Override
     public void saveCategory(Category category) {
-        if(categoryRepository.findByName(category.getName()).isPresent()){
-            throw new CategoryAlreadyExistsException("Category already exists");
-        }
-
-
-        CategoryEntity category1 = categoryRepository.save(categoryEntityMapper.categoryToCategoryEntity(category));
-        System.out.println(category1);
-
+        categoryRepository.save(categoryEntityMapper.categoryToCategoryEntity(category));
     }
 
     @Override
@@ -58,9 +50,18 @@ public class CategoryAdapter implements ICategoryPersistencePort {
     }
 
     @Override
-    public Category getCategory(String categoryName) {
+    public Optional<Category> findByName(String categoryName) {
 
-        return categoryEntityMapper.categoryEntityToCategory(categoryRepository.findByName(categoryName)
-                .orElseThrow(CategoryNotFoundException::new));
+        Optional<CategoryEntity> categoryEntity = categoryRepository.findByName(categoryName);
+
+        return categoryEntity.map(categoryEntityMapper::categoryEntityToCategory);
+
+    }
+
+    @Override
+    public Optional<Category> getCategory(Long categoryId) {
+        Optional<CategoryEntity> categoryEntity = categoryRepository.findById(categoryId);
+
+        return categoryEntity.map(categoryEntityMapper::categoryEntityToCategory);
     }
 }

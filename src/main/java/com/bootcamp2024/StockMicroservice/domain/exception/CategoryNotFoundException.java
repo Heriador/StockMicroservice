@@ -1,4 +1,4 @@
-package com.bootcamp2024.StockMicroservice.infrastructure.exception;
+package com.bootcamp2024.StockMicroservice.domain.exception;
 
 public class CategoryNotFoundException extends RuntimeException{
     public CategoryNotFoundException() {

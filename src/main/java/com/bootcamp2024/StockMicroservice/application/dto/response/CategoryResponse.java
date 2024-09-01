@@ -1,13 +1,14 @@
-package com.bootcamp2024.StockMicroservice.application.dto;
+package com.bootcamp2024.StockMicroservice.application.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 @Builder
-public class AddCategory {
+public class CategoryResponse {
+    private Long id;
     private String name;
     private String description;
 }

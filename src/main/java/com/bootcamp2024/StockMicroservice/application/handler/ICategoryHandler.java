@@ -1,11 +1,8 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
-import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
-import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.GetAllCategories;
-import com.bootcamp2024.StockMicroservice.domain.model.Category;
-
-import java.util.List;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.GetAllCategories;
 
 public interface ICategoryHandler {
 
