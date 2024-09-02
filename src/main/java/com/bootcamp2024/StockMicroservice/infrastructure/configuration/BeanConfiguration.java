@@ -1,6 +1,7 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration;
 
 
+
 import com.bootcamp2024.StockMicroservice.domain.api.IBrandServicePort;
 import com.bootcamp2024.StockMicroservice.domain.spi.IBrandPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;

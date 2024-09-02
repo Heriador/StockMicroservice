@@ -1,8 +1,8 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
-import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
-import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.GetAllCategories;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.GetAllCategories;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.GetAllCategoriesMapper;
@@ -40,7 +40,7 @@ public class CategoryHandler implements ICategoryHandler {
 
     @Override
     public CategoryResponse getCategory(String categoryName) {
-        Category category = categoryServicePort.getCategory(categoryName);
+        Category category = categoryServicePort.findByName(categoryName);
         return categoryResponseMapper.toResponse(category);
     }
 
