@@ -31,7 +31,7 @@ public class CategoryRestController {
             @ApiResponse(responseCode = "409", description = "Category already exists", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<Void> createCategory(@Valid @RequestBody AddCategory addCategory){
+    public ResponseEntity<Void> createCategory(@RequestBody @Valid AddCategory addCategory){
         categoryHandler.createCategory(addCategory);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

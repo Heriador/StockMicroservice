@@ -7,7 +7,6 @@ import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMap
 import com.bootcamp2024.StockMicroservice.application.mapper.GetAllCategoriesMapper;
 import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -31,10 +30,7 @@ class CategoryHandlerTest {
     @Autowired
     private final CategoryHandler categoryHandler = new CategoryHandler(categoryServicePort, categoryRequestMapper, categoryResponseMapper, getAllCategoriesMapper);
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+
 
     @Test
     void createCategory() {
@@ -45,36 +41,21 @@ class CategoryHandlerTest {
 
         categoryHandler.createCategory(addCategory);
 
-//        verify(categoryRequestMapper, times(1)).addCategoryToCategory(addCategory);
         verify(categoryServicePort, times(1)).saveCategory(category);
     }
-
-//    @Test
-//    void getAllCategories() {
-//        List<Category> categories = Arrays.asList(new Category(), new Category());
-//        List<CategoryResponse> categoryResponses = Arrays.asList(new CategoryResponse(), new CategoryResponse());
-//        when(categoryServicePort.getAllCategories()).thenReturn(categories);
-//        when(categoryResponseMapper.toResponseList(categories)).thenReturn(categoryResponses);
-//
-//        List<CategoryResponse> result = categoryHandler.getAllcategories();
-//
-//        assertEquals(2, result.size());
-//        verify(categoryServicePort, times(1)).getAllCategories();
-//        verify(categoryResponseMapper, times(1)).toResponseList(categories);
-//    }
 
     @Test
     void getCategory() {
         Category category = new Category(1L,"computadoras","para entrar a internet");
         CategoryResponse categoryResponse = CategoryResponse.builder().id(1L).name("computadoras").description("para entrar a internet").build();
 
-        when(categoryServicePort.getCategory("computadoras")).thenReturn(category);
+        when(categoryServicePort.findByName("computadoras")).thenReturn(category);
         when(categoryResponseMapper.toResponse(category)).thenReturn(categoryResponse);
 
         CategoryResponse result = categoryHandler.getCategory("computadoras");
 
         assertEquals(categoryResponse, result);
-        verify(categoryServicePort, times(1)).getCategory("computadoras");
+        verify(categoryServicePort, times(1)).findByName("computadoras");
         verify(categoryResponseMapper, times(1)).toResponse(category);
     }
 }

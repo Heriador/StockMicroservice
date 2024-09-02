@@ -2,7 +2,6 @@ package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name = "category")
@@ -20,6 +19,6 @@ public class CategoryEntity {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @Length(max = 90, message = "Description cannot be longer than 90 Characters")
+    @Column(nullable = false)
     private String description;
 }

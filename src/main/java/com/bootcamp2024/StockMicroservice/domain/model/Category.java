@@ -1,7 +1,5 @@
 package com.bootcamp2024.StockMicroservice.domain.model;
 
-import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
-import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 
 public class Category {
 
@@ -10,15 +8,7 @@ public class Category {
     private String description;
 
     public Category(Long id, String name, String description) {
-
-        if(name.trim().isEmpty()){
-            throw new EmptyFieldException(DomainConstants.Field.NAME.toString());
-        }
-        if(description.trim().isEmpty()){
-            throw new EmptyFieldException(DomainConstants.Field.DESCRIPTION.toString());
-        }
-
-            this.id = id;
+        this.id = id;
         this.name = name;
         this.description = description;
     }
