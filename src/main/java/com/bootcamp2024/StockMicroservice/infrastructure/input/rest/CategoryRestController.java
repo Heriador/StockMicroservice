@@ -39,7 +39,9 @@ public class CategoryRestController {
     @Operation(summary = "Get All Categories by pagination")
     @Parameters(value = {
             @Parameter(in = ParameterIn.QUERY,name = "page", description = "Page number to be returned"),
-            @Parameter(in = ParameterIn.QUERY,name = "size", description = "Number of elements per page")
+            @Parameter(in = ParameterIn.QUERY,name = "size", description = "Number of elements per page"),
+            @Parameter(in =ParameterIn.QUERY, name = "ord", description = "Determines if the results should be ordered ascending(True) or descending(False)")
+
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All categories returned",
@@ -49,9 +51,11 @@ public class CategoryRestController {
     @GetMapping
     public ResponseEntity<GetAllCategories> getAllCategories(
             @RequestParam(value = "page", defaultValue = "0",required = false) int page,
-            @RequestParam(value = "size", defaultValue = "10",required = false) int size
+            @RequestParam(value = "size", defaultValue = "10",required = false) int size,
+            @RequestParam(value = "ord", defaultValue = "true", required = false) boolean ord
+
     ){
-        return ResponseEntity.ok(categoryHandler.getAllcategories(page, size));
+        return ResponseEntity.ok(categoryHandler.getAllcategories(page, size,ord));
     }
 
     @Operation(summary = "Get a Category by name")

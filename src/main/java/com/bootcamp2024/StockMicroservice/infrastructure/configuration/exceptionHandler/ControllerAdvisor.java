@@ -2,6 +2,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.configuration.exceptio
 
 import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.infrastructure.configuration.Constants;
+
 import com.bootcamp2024.StockMicroservice.domain.exception.CategoryAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.domain.exception.CategoryNotFoundException;
 import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
@@ -43,14 +44,28 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.CATEGORY_NOT_FOUND_EXCEPTION_MESSAGE,e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
     }
 
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String,Object> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
-            errors.put(error.getField(),error.getDefaultMessage())
-        );
+            errors.put(error.getField(),error.getDefaultMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+    @ExceptionHandler(BrandAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> hanldeBrandAlreadyExistsException(BrandNotFoundException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(String.format(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getMessage()),HttpStatus.CONFLICT.toString(),LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(BrandNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleBrandNotFoundException(BrandNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.BRAND_NOT_FOUND_EXCEPTION_MESSAGE, e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
+    }
+
+
+ 
+        
 
 }

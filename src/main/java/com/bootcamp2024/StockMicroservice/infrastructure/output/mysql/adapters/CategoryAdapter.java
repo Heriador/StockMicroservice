@@ -14,6 +14,7 @@ import org.springframework.data.domain.*;
 import java.util.List;
 import java.util.Optional;
 
+
 @RequiredArgsConstructor
 public class CategoryAdapter implements ICategoryPersistencePort {
 
@@ -38,6 +39,7 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         List<CategoryEntity> categoryEntityList = categoryEntityPage.getContent();
 
         PaginationCustom pagination = new PaginationCustom();
+
         pagination.setContent(categoryEntityMapper.toCategoryList(categoryEntityList));
         pagination.setPageNumber(categoryEntityPage.getNumber());
         pagination.setPageSize(categoryEntityPage.getSize());
@@ -63,5 +65,6 @@ public class CategoryAdapter implements ICategoryPersistencePort {
         Optional<CategoryEntity> categoryEntity = categoryRepository.findById(categoryId);
 
         return categoryEntity.map(categoryEntityMapper::categoryEntityToCategory);
+
     }
 }

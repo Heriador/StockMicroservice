@@ -8,7 +8,7 @@ public interface ICategoryHandler {
 
     void createCategory(AddCategory addCategory);
 
-    GetAllCategories getAllcategories(int page, int size);
+    GetAllCategories getAllcategories(int page, int size, boolean ord);
 
     CategoryResponse getCategory(String categoryName);
 
