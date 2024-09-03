@@ -1,17 +1,17 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration;
 
 
-
 import com.bootcamp2024.StockMicroservice.domain.api.IBrandServicePort;
 import com.bootcamp2024.StockMicroservice.domain.spi.IBrandPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.usecases.BrandUseCases;
 import com.bootcamp2024.StockMicroservice.domain.usecases.CategoryUseCases;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.BrandEntityMapper;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.IBrandEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters.BrandAdapter;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters.CategoryAdapter;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.IBrandRepository;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
@@ -27,6 +27,9 @@ public class BeanConfiguration {
 
     private final ICategoryRepository categoryRepository;
     private final CategoryEntityMapper categoryEntityMapper;
+    private final IBrandRepository brandRepository;
+    private final IBrandEntityMapper brandEntityMapper;
+
     private final PaginationMapper paginationMapper;
     private final IBrandRepository brandRepository;
     private final BrandEntityMapper brandEntityMapper;
