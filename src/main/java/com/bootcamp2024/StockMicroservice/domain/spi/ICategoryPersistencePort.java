@@ -10,7 +10,7 @@ public interface ICategoryPersistencePort {
 
     void saveCategory(Category category);
 
-    PaginationCustom getAllCategories(int page, int size);
+    Optional<PaginationCustom<Category>> getAllCategories(int page, int size, boolean order);
 
     Optional<Category> findByName(String categoryName);
 

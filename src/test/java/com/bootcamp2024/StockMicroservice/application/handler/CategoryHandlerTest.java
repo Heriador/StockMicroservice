@@ -4,7 +4,7 @@ import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
 import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMapper;
-import com.bootcamp2024.StockMicroservice.application.mapper.GetAllCategoriesMapper;
+import com.bootcamp2024.StockMicroservice.application.mapper.PaginationResponseMapper;
 import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import org.junit.jupiter.api.Test;
@@ -25,10 +25,10 @@ class CategoryHandlerTest {
 
     private final CategoryResponseMapper categoryResponseMapper = Mockito.mock(CategoryResponseMapper.class);
 
-    private final GetAllCategoriesMapper getAllCategoriesMapper = Mockito.mock(GetAllCategoriesMapper.class);
+    private final PaginationResponseMapper paginationResponseMapper = Mockito.mock(PaginationResponseMapper.class);
 
     @Autowired
-    private final CategoryHandler categoryHandler = new CategoryHandler(categoryServicePort, categoryRequestMapper, categoryResponseMapper, getAllCategoriesMapper);
+    private final CategoryHandler categoryHandler = new CategoryHandler(categoryServicePort, categoryRequestMapper, categoryResponseMapper, paginationResponseMapper);
 
 
 

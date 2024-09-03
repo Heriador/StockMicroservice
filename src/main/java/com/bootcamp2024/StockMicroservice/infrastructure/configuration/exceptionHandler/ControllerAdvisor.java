@@ -4,7 +4,7 @@ import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
 import com.bootcamp2024.StockMicroservice.infrastructure.configuration.Constants;
 import com.bootcamp2024.StockMicroservice.domain.exception.CategoryAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.domain.exception.CategoryNotFoundException;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
+import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

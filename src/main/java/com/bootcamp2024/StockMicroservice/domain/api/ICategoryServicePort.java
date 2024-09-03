@@ -6,7 +6,7 @@ import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 public interface ICategoryServicePort {
     void saveCategory(Category category);
 
-    PaginationCustom getAllCategories(int page, int size);
+    PaginationCustom<Category> getAllCategories(int page, int size, boolean ord);
 
     Category findByName(String categoryName);
 

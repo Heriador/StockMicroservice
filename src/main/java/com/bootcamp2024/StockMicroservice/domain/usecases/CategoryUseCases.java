@@ -8,6 +8,8 @@ import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 import com.bootcamp2024.StockMicroservice.domain.exception.CategoryAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.domain.exception.CategoryNotFoundException;
+import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
+
 
 
 public class CategoryUseCases implements ICategoryServicePort {
@@ -34,8 +36,9 @@ public class CategoryUseCases implements ICategoryServicePort {
     }
 
     @Override
-    public PaginationCustom getAllCategories(int page, int size) {
-        return categoryPersistencePort.getAllCategories(page, size);
+    public PaginationCustom<Category> getAllCategories(int page, int size, boolean ord) {
+
+        return categoryPersistencePort.getAllCategories(page, size, ord).orElseThrow(NoDataFoundException::new);
     }
 
     @Override

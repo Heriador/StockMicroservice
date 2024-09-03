@@ -3,15 +3,15 @@ package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 import com.bootcamp2024.StockMicroservice.domain.spi.ICategoryPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.CategoryEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 
 
-import java.util.List;
+
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -19,6 +19,7 @@ public class CategoryAdapter implements ICategoryPersistencePort {
 
     private final ICategoryRepository categoryRepository;
     private final CategoryEntityMapper categoryEntityMapper;
+    private final PaginationMapper paginationMapper;
 
     @Override
     public void saveCategory(Category category) {
@@ -26,27 +27,19 @@ public class CategoryAdapter implements ICategoryPersistencePort {
     }
 
     @Override
-    public PaginationCustom getAllCategories(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Optional<PaginationCustom<Category>> getAllCategories(int page, int size, boolean ord) {
+        Sort sort = ord ? Sort.by("name").ascending() : Sort.by("name").descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<CategoryEntity> categoryEntityPage = categoryRepository.findAll(pageable);
 
-        if(categoryEntityPage.isEmpty()){
-            throw new NoDataFoundException("No categories found");
+        PaginationCustom<Category> categoryPaginationCustom = paginationMapper.toPaginationCustom(categoryEntityPage);
+
+        if(categoryPaginationCustom.getContent().isEmpty()){
+            return Optional.empty();
         }
 
-        List<CategoryEntity> categoryEntityList = categoryEntityPage.getContent();
-
-        PaginationCustom pagination = new PaginationCustom();
-        pagination.setContent(categoryEntityMapper.toCategoryList(categoryEntityList));
-        pagination.setPageNumber(categoryEntityPage.getNumber());
-        pagination.setPageSize(categoryEntityPage.getSize());
-        pagination.setTotalElements(categoryEntityPage.getTotalElements());
-        pagination.setTotalPages(categoryEntityPage.getTotalPages());
-        pagination.setLast(categoryEntityPage.isLast());
-
-
-        return pagination;
+        return Optional.of(categoryPaginationCustom);
     }
 
     @Override
