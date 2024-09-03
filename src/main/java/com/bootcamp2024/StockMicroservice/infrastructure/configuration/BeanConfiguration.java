@@ -10,6 +10,7 @@ import com.bootcamp2024.StockMicroservice.domain.usecases.BrandUseCases;
 import com.bootcamp2024.StockMicroservice.domain.usecases.CategoryUseCases;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.BrandEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters.BrandAdapter;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters.CategoryAdapter;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.IBrandRepository;
@@ -26,13 +27,14 @@ public class BeanConfiguration {
 
     private final ICategoryRepository categoryRepository;
     private final CategoryEntityMapper categoryEntityMapper;
+    private final PaginationMapper paginationMapper;
     private final IBrandRepository brandRepository;
     private final BrandEntityMapper brandEntityMapper;
 
 
     @Bean
     public ICategoryPersistencePort categoryPersistencePort(){
-        return new CategoryAdapter(categoryRepository, categoryEntityMapper);
+        return new CategoryAdapter(categoryRepository, categoryEntityMapper, paginationMapper);
     }
 
     @Bean

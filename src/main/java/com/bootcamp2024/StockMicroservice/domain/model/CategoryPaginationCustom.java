@@ -2,19 +2,19 @@ package com.bootcamp2024.StockMicroservice.domain.model;
 
 import java.util.List;
 
-public class CategoryPaginationCustom {
+public class PaginationCustom<T> {
 
-    private List<Category> content;
+    private List<T> content;
     private int pageNumber;
     private int pageSize;
     private long totalElements;
     private int totalPages;
     private boolean last;
 
-    public CategoryPaginationCustom() {
+    public PaginationCustom() {
     }
 
-    public CategoryPaginationCustom(List<Category> content, int pageNumber, int pageSize, long totalElements, int totalPages, boolean last) {
+    public PaginationCustom(List<T> content, int pageNumber, int pageSize, long totalElements, int totalPages, boolean last) {
         this.content = content;
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
@@ -23,11 +23,11 @@ public class CategoryPaginationCustom {
         this.last = last;
     }
 
-    public List<Category> getContent() {
+    public List<T> getContent() {
         return content;
     }
 
-    public void setContent(List<Category> content) {
+    public void setContent(List<T> content) {
         this.content = content;
     }
 

@@ -2,7 +2,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
 import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.response.GetAllCategories;
+import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.ICategoryHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,17 +45,17 @@ public class CategoryRestController {
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All categories returned",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = GetAllCategories.class))),
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = PaginationResponse.class))),
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping
-    public ResponseEntity<GetAllCategories> getAllCategories(
+    public ResponseEntity<PaginationResponse<CategoryResponse>> getAllCategories(
             @RequestParam(value = "page", defaultValue = "0",required = false) int page,
             @RequestParam(value = "size", defaultValue = "10",required = false) int size,
             @RequestParam(value = "ord", defaultValue = "true", required = false) boolean ord
-
     ){
-        return ResponseEntity.ok(categoryHandler.getAllcategories(page, size,ord));
+        PaginationResponse<CategoryResponse> response = categoryHandler.getAllcategories(page, size, ord);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get a Category by name")
