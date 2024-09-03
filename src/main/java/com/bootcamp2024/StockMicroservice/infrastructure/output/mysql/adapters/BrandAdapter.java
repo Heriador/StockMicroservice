@@ -1,6 +1,7 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
+
 import com.bootcamp2024.StockMicroservice.domain.spi.IBrandPersistencePort;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.IBrandEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.BrandEntity;
@@ -9,15 +10,23 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+import com.bootcamp2024.StockMicroservice.domain.model.BrandPaginationCustom;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+
 @RequiredArgsConstructor
 public class BrandAdapter implements IBrandPersistencePort {
 
     private final IBrandRepository brandRepository;
     private final IBrandEntityMapper brandEntityMapper;
 
+
     @Override
     public void saveBrand(Brand brand) {
-
 
         brandRepository.save(brandEntityMapper.brandToBrandEntity(brand));
 
@@ -37,5 +46,30 @@ public class BrandAdapter implements IBrandPersistencePort {
         Optional<BrandEntity> brandEntity = brandRepository.findById(brandId);
 
         return brandEntity.map(brandEntityMapper::brandEntityToBrand);
+
+    }
+
+    @Override
+    public BrandPaginationCustom getAllBrands(int page, int size, boolean ord) {
+        Sort sort = ord ? Sort.by("name").ascending() : Sort.by("name").descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<BrandEntity> brandEntityPage = brandRepository.findAll(pageable);
+
+        if(brandEntityPage.isEmpty()){
+            throw new NoDataFoundException("No Brands found");
+        }
+
+        BrandPaginationCustom pagination = new BrandPaginationCustom();
+        pagination.setContent(brandEntityMapper.toBrandList(brandEntityPage.getContent()));
+        pagination.setPageNumber(brandEntityPage.getNumber());
+        pagination.setPageSize(brandEntityPage.getSize());
+        pagination.setTotalElements(brandEntityPage.getTotalElements());
+        pagination.setTotalPages(brandEntityPage.getTotalPages());
+        pagination.setLast(brandEntityPage.isLast());
+
+        return pagination;
+
     }
 }

@@ -39,7 +39,9 @@ public class CategoryRestController {
     @Operation(summary = "Get All Categories by pagination")
     @Parameters(value = {
             @Parameter(in = ParameterIn.QUERY,name = "page", description = "Page number to be returned"),
-            @Parameter(in = ParameterIn.QUERY,name = "size", description = "Number of elements per page")
+            @Parameter(in = ParameterIn.QUERY,name = "size", description = "Number of elements per page"),
+            @Parameter(in =ParameterIn.QUERY, name = "ord", description = "Determines if the results should be ordered ascending(True) or descending(False)")
+
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All categories returned",

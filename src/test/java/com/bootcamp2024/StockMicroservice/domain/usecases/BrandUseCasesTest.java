@@ -1,5 +1,6 @@
 package com.bootcamp2024.StockMicroservice.domain.usecases;
 
+
 import com.bootcamp2024.StockMicroservice.domain.exception.BrandAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.domain.exception.BrandNotFoundException;
 import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
@@ -16,8 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import com.bootcamp2024.StockMicroservice.domain.model.BrandPaginationCustom;
+import org.mockito.MockitoAnnotations;
+
+
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 
 @ExtendWith(MockitoExtension.class)
@@ -33,10 +39,7 @@ class BrandUseCasesTest {
 
     @BeforeEach
     void setUp(){
-        brand = new Brand();
-        brand.setId(null);
-        brand.setName("LG");
-        brand.setDescription("marca de televisores");
+
     }
 
     @Test
@@ -81,7 +84,6 @@ class BrandUseCasesTest {
     @DisplayName("Calling useCase saveBrand should throw BrandAlreadyExistsException")
     void saveBrandShouldThrowBrandAlreadyExistException(){
 
-
         when(brandPersistencePort.findByName(brand.getName())).thenReturn(Optional.of(brand));
 
         assertThrows(BrandAlreadyExistsException.class, ()-> brandUseCases.saveBrand(brand));
@@ -97,7 +99,6 @@ class BrandUseCasesTest {
 
         verify(brandPersistencePort, times(1)).findByName("LG");
         assertEquals(brand, brand1);
-
     }
 
     @Test()
@@ -127,6 +128,26 @@ class BrandUseCasesTest {
         when(brandPersistencePort.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(BrandNotFoundException.class, ()->brandUseCases.findById(1L));
+    }
+
+
+    @Test
+    @DisplayName("Calling useCase getAllBrands should pass and return a pagination response object")
+    void getAllBrandsShouldPass(){
+        brandUseCases.getAllaBrands(0,10,true);
+
+        when(brandPersistencePort.getAllBrands(0,10,true)).thenReturn(Mockito.mock(BrandPaginationCustom.class));
+
+        verify(brandPersistencePort, times(1)).getAllBrands(0,10,true);
+
+    }
+
+    @Test
+    @DisplayName("Calling useCase getAllBrands Should return EmptyList and Throw NoDataFoundException")
+    void getAllCategoriesShouldReturnEmptyList() {
+        doThrow(NoDataFoundException.class).when(brandPersistencePort).getAllBrands(0, 10,false);
+
+        assertThrows(NoDataFoundException.class, () -> brandPersistencePort.getAllBrands(0, 10,false));
     }
 
 

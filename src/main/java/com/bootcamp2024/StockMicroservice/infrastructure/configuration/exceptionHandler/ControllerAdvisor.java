@@ -3,7 +3,6 @@ package com.bootcamp2024.StockMicroservice.infrastructure.configuration.exceptio
 import com.bootcamp2024.StockMicroservice.domain.exception.*;
 import com.bootcamp2024.StockMicroservice.infrastructure.configuration.Constants;
 
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -41,6 +40,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.CATEGORY_NOT_FOUND_EXCEPTION_MESSAGE,e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
     }
 
+
     @ExceptionHandler(BrandAlreadyExistsException.class)
     public ResponseEntity<ExceptionResponse> handleBrandAlreadyExistsException(BrandAlreadyExistsException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(String.format(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getMessage()),HttpStatus.CONFLICT.toString(),LocalDateTime.now()));
@@ -52,14 +52,20 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
 
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         Map<String,Object> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
+
                 errors.put(error.getField(),error.getDefaultMessage())
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
+
+ 
+ 
+        
 
 }
