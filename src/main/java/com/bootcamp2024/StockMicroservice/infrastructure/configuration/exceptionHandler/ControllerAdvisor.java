@@ -1,11 +1,7 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration.exceptionHandler;
 
-import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
+import com.bootcamp2024.StockMicroservice.domain.exception.*;
 import com.bootcamp2024.StockMicroservice.infrastructure.configuration.Constants;
-import com.bootcamp2024.StockMicroservice.domain.exception.CategoryAlreadyExistsException;
-import com.bootcamp2024.StockMicroservice.domain.exception.CategoryNotFoundException;
-import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.*;
 
 
 import org.springframework.http.HttpHeaders;
@@ -36,17 +32,17 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(CategoryAlreadyExistsException.class)
-    public  ResponseEntity<ExceptionResponse> handleCategorieAlreadyExistsException(CategoryAlreadyExistsException e){
+    public  ResponseEntity<ExceptionResponse> handleCategoryAlreadyExistsException(CategoryAlreadyExistsException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(String.format(Constants.CATEGORY_ALREADY_EXISTS_EXCEPTION_MESSAGE,e.getMessage()), HttpStatus.CONFLICT.toString(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
-    public  ResponseEntity<ExceptionResponse> handleCategorieNotFoundException(CategoryNotFoundException e){
+    public  ResponseEntity<ExceptionResponse> handleCategoryNotFoundException(CategoryNotFoundException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.CATEGORY_NOT_FOUND_EXCEPTION_MESSAGE,e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(BrandAlreadyExistsException.class)
-    public ResponseEntity<ExceptionResponse> hanldeBrandAlreadyExistsException(BrandNotFoundException e){
+    public ResponseEntity<ExceptionResponse> handleBrandAlreadyExistsException(BrandAlreadyExistsException e){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(String.format(Constants.BRAND_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getMessage()),HttpStatus.CONFLICT.toString(),LocalDateTime.now()));
     }
 
