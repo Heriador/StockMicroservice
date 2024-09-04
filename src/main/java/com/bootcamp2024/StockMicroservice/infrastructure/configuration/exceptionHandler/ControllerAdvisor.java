@@ -51,6 +51,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.BRAND_NOT_FOUND_EXCEPTION_MESSAGE, e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(ItemAlreadyExistException.class)
+    public  ResponseEntity<ExceptionResponse> handleItemAlreadyExistsException(ItemAlreadyExistException e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(String.format(Constants.ITEM_ALREADY_EXISTS_EXCEPTION_MESSAGE, e.getMessage()), HttpStatus.CONFLICT.toString(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleItemNotFoundException(ItemNotFoundException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(String.format(Constants.ITEM_NOT_FOUND_EXCEPTION_MESSAGE, e.getMessage()), HttpStatus.NOT_FOUND.toString(), LocalDateTime.now()));
+    }
 
 
     @Override

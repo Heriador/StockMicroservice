@@ -48,13 +48,13 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-	finalizedBy jacocoTestReport
+//	finalizedBy jacocoTestReport
 }
 
 
-jacocoTestReport{
-//	reports {
-//		xml true
-//		html. true
-//	}
-}
+//jacocoTestReport{
+////	reports {
+////		xml true
+////		html. true
+////	}
+//}
