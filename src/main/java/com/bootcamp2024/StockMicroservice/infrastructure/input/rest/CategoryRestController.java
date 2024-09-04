@@ -1,24 +1,22 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
-import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
-import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.GetAllCategories;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.ICategoryHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/category/")
@@ -33,7 +31,7 @@ public class CategoryRestController {
             @ApiResponse(responseCode = "409", description = "Category already exists", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<Void> createCategory(@RequestBody AddCategory addCategory){
+    public ResponseEntity<Void> createCategory(@RequestBody @Valid AddCategory addCategory){
         categoryHandler.createCategory(addCategory);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -47,17 +45,17 @@ public class CategoryRestController {
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All categories returned",
-                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = GetAllCategories.class))),
+                            content = @Content(mediaType = "application/json",schema = @Schema(implementation = PaginationResponse.class))),
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping
-    public ResponseEntity<GetAllCategories> getAllCategories(
+    public ResponseEntity<PaginationResponse<CategoryResponse>> getAllCategories(
             @RequestParam(value = "page", defaultValue = "0",required = false) int page,
             @RequestParam(value = "size", defaultValue = "10",required = false) int size,
             @RequestParam(value = "ord", defaultValue = "true", required = false) boolean ord
-
     ){
-        return ResponseEntity.ok(categoryHandler.getAllcategories(page, size,ord));
+        PaginationResponse<CategoryResponse> response = categoryHandler.getAllcategories(page, size, ord);
+        return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "Get a Category by name")

@@ -1,64 +1,72 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
-import com.bootcamp2024.StockMicroservice.domain.model.BrandPaginationCustom;
+
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IBrandPersistencePort;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.BrandAlreadyExistsException;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.BrandNotFoundException;
-import com.bootcamp2024.StockMicroservice.infrastructure.exception.NoDataFoundException;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.BrandEntityMapper;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.IBrandEntityMapper;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.BrandEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.IBrandRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+
 @RequiredArgsConstructor
 public class BrandAdapter implements IBrandPersistencePort {
 
     private final IBrandRepository brandRepository;
-    private final BrandEntityMapper brandEntityMapper;
+    private final IBrandEntityMapper brandEntityMapper;
+    private final PaginationMapper paginationMapper;
+
 
     @Override
     public void saveBrand(Brand brand) {
-
-        if(brandRepository.findByName(brand.getName()).isPresent()){
-            throw new BrandAlreadyExistsException("Brand Already exists");
-        }
 
         brandRepository.save(brandEntityMapper.brandToBrandEntity(brand));
 
     }
 
     @Override
-    public Brand getBrand(String brandName) {
+    public Optional<Brand> findByName(String brandName) {
 
-        return brandEntityMapper.brandEntityToBrand(brandRepository.findByName(brandName).orElseThrow(BrandNotFoundException::new));
+        Optional<BrandEntity> brandEntity = brandRepository.findByName(brandName);
+
+        return brandEntity.map(brandEntityMapper::brandEntityToBrand);
     }
 
     @Override
-    public BrandPaginationCustom getAllBrands(int page, int size, boolean ord) {
+    public Optional<Brand> findById(Long brandId) {
+
+        Optional<BrandEntity> brandEntity = brandRepository.findById(brandId);
+
+        return brandEntity.map(brandEntityMapper::brandEntityToBrand);
+
+    }
+
+    @Override
+    public Optional<PaginationCustom<Brand>> getAllBrands(int page, int size, boolean ord) {
         Sort sort = ord ? Sort.by("name").ascending() : Sort.by("name").descending();
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<BrandEntity> brandEntityPage = brandRepository.findAll(pageable);
 
-        if(brandEntityPage.isEmpty()){
-            throw new NoDataFoundException("No Brands found");
+        PaginationCustom<Brand> brandPaginationCustom = paginationMapper.toBrandPaginationCustom(brandEntityPage);
+
+        if(brandPaginationCustom.getContent() == null || brandPaginationCustom.getContent().isEmpty()){
+            return Optional.empty();
         }
 
-        BrandPaginationCustom pagination = new BrandPaginationCustom();
-        pagination.setContent(brandEntityMapper.toBrandList(brandEntityPage.getContent()));
-        pagination.setPageNumber(brandEntityPage.getNumber());
-        pagination.setPageSize(brandEntityPage.getSize());
-        pagination.setTotalElements(brandEntityPage.getTotalElements());
-        pagination.setTotalPages(brandEntityPage.getTotalPages());
-        pagination.setLast(brandEntityPage.isLast());
 
-        return pagination;
+
+        return Optional.of(brandPaginationCustom);
 
     }
 }

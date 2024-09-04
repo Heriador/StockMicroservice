@@ -1,8 +1,8 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 
-import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
-import com.bootcamp2024.StockMicroservice.application.dto.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.ICategoryHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

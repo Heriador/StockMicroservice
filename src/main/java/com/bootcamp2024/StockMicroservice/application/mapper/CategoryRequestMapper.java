@@ -1,7 +1,7 @@
 package com.bootcamp2024.StockMicroservice.application.mapper;
 
 
-import com.bootcamp2024.StockMicroservice.application.dto.AddCategory;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
