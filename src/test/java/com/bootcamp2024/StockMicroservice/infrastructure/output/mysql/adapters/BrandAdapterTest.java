@@ -1,7 +1,9 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.IBrandEntityMapper;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.BrandEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.IBrandRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,9 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +34,9 @@ class BrandAdapterTest {
 
     @Mock
     private IBrandEntityMapper brandEntityMapper;
+
+    @Mock
+    private PaginationMapper paginationMapper;
 
     @InjectMocks
     private BrandAdapter brandAdapter;
@@ -88,6 +99,40 @@ class BrandAdapterTest {
 
         assertEquals(Optional.of(brand), response);
 
+    }
+
+    @Test
+    @DisplayName("Calling method getAllBrands should return the same object send in the mock")
+    void getAllBrandsShouldPass(){
+
+        Pageable pageable = PageRequest.of(0,10, Sort.by("name").ascending());
+        Page<BrandEntity> brandEntityPage = Mockito.mock(Page.class);
+
+
+        PaginationCustom<Brand> brandPaginationCustom = new PaginationCustom<>(List.of(brand),0,1,1L,1,true);
+
+
+
+        when(brandRepository.findAll(pageable)).thenReturn(brandEntityPage);
+        when(paginationMapper.toBrandPaginationCustom(brandEntityPage)).thenReturn(brandPaginationCustom);
+
+        Optional<PaginationCustom<Brand>> result = brandAdapter.getAllBrands(0,10,true);
+
+        verify(brandRepository, times(1)).findAll(pageable);
+        verify(paginationMapper, times(1)).toBrandPaginationCustom(brandEntityPage);
+
+        assertTrue(result.isPresent());
+
+        assertAll(
+                () -> assertEquals(brand, result.get().getContent().get(0)),
+                () -> assertEquals(0,result.get().getPageNumber()),
+                () -> assertEquals(1,result.get().getPageSize()),
+                () -> assertEquals(1L,result.get().getTotalElements()),
+                () -> assertEquals(1,result.get().getTotalPages()),
+                () -> assertTrue(result.get().isLast())
+
+
+        );
     }
 
 }

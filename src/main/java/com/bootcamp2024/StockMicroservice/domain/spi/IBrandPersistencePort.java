@@ -1,11 +1,10 @@
 package com.bootcamp2024.StockMicroservice.domain.spi;
 
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 
 
 import java.util.Optional;
-
-import com.bootcamp2024.StockMicroservice.domain.model.BrandPaginationCustom;
 
 
 public interface IBrandPersistencePort {
@@ -17,7 +16,7 @@ public interface IBrandPersistencePort {
 
     Optional<Brand> findById(Long brandId);
 
-    BrandPaginationCustom getAllBrands(int page, int size, boolean ord);
+    Optional<PaginationCustom<Brand>> getAllBrands(int page, int size, boolean ord);
 
 
 }

@@ -4,6 +4,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddBrand;
 import com.bootcamp2024.StockMicroservice.application.dto.response.BrandResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.IBrandHandler;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -77,11 +78,11 @@ public class BrandRestController {
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All Brands returned",
-                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = BrandPaginationResponse.class))),
+                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = PaginationResponse.class))),
             @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
     })
     @GetMapping
-    public ResponseEntity<BrandPaginationResponse> getAllaBrands(
+    public ResponseEntity<PaginationResponse<BrandResponse>> getAllaBrands(
             @RequestParam(value = "page", defaultValue = "0", required = false) int page,
             @RequestParam(value = "size", defaultValue = "10", required = false) int size,
             @RequestParam(value = "ord", defaultValue = "true", required = false) boolean ord

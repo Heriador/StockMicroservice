@@ -11,7 +11,6 @@ import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.IBr
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters.BrandAdapter;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters.CategoryAdapter;
-import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.CategoryEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.IBrandRepository;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.repository.ICategoryRepository;
@@ -31,8 +30,7 @@ public class BeanConfiguration {
     private final IBrandEntityMapper brandEntityMapper;
 
     private final PaginationMapper paginationMapper;
-    private final IBrandRepository brandRepository;
-    private final BrandEntityMapper brandEntityMapper;
+
 
 
     @Bean
@@ -42,7 +40,7 @@ public class BeanConfiguration {
 
     @Bean
     public IBrandPersistencePort brandPersistencePort(){
-        return new BrandAdapter(brandRepository,brandEntityMapper);
+        return new BrandAdapter(brandRepository,brandEntityMapper, paginationMapper);
     }
 
 

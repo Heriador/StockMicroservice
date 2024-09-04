@@ -4,21 +4,22 @@ package com.bootcamp2024.StockMicroservice.domain.usecases;
 import com.bootcamp2024.StockMicroservice.domain.exception.BrandAlreadyExistsException;
 import com.bootcamp2024.StockMicroservice.domain.exception.BrandNotFoundException;
 import com.bootcamp2024.StockMicroservice.domain.exception.EmptyFieldException;
+import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IBrandPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
-
-import com.bootcamp2024.StockMicroservice.domain.model.BrandPaginationCustom;
-import org.mockito.MockitoAnnotations;
 
 
 import static org.mockito.Mockito.*;
@@ -35,11 +36,25 @@ class BrandUseCasesTest {
     @InjectMocks
     private BrandUseCases brandUseCases;
 
-    Brand brand;
+    @Autowired
+    private static Brand brand;
 
-    @BeforeEach
-    void setUp(){
+    @Autowired
+    private static PaginationCustom<Brand> paginationCustom;
 
+    @BeforeAll
+    static void beforeAll() {
+        brand = new Brand();
+        brand.setName("LG");
+        brand.setDescription("marca de televisores");
+
+        paginationCustom = new PaginationCustom<>();
+        paginationCustom.setContent(List.of(brand));
+        paginationCustom.setPageNumber(0);
+        paginationCustom.setPageSize(1);
+        paginationCustom.setTotalElements(1L);
+        paginationCustom.setTotalPages(1);
+        paginationCustom.setLast(true);
     }
 
     @Test
@@ -134,20 +149,25 @@ class BrandUseCasesTest {
     @Test
     @DisplayName("Calling useCase getAllBrands should pass and return a pagination response object")
     void getAllBrandsShouldPass(){
-        brandUseCases.getAllaBrands(0,10,true);
 
-        when(brandPersistencePort.getAllBrands(0,10,true)).thenReturn(Mockito.mock(BrandPaginationCustom.class));
+        when(brandPersistencePort.getAllBrands(0,10,true)).thenReturn(Optional.of(paginationCustom));
+
+        PaginationCustom<Brand> result = brandUseCases.getAllBrands(0,10,true);
 
         verify(brandPersistencePort, times(1)).getAllBrands(0,10,true);
+        assertEquals(paginationCustom, result);
 
     }
+
+
 
     @Test
     @DisplayName("Calling useCase getAllBrands Should return EmptyList and Throw NoDataFoundException")
     void getAllCategoriesShouldReturnEmptyList() {
-        doThrow(NoDataFoundException.class).when(brandPersistencePort).getAllBrands(0, 10,false);
 
-        assertThrows(NoDataFoundException.class, () -> brandPersistencePort.getAllBrands(0, 10,false));
+        when(brandPersistencePort.getAllBrands(0,10, true)).thenReturn(Optional.empty());
+
+        assertThrows(NoDataFoundException.class, () -> brandUseCases.getAllBrands(0, 10,true));
     }
 
 

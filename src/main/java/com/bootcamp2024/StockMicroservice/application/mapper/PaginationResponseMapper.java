@@ -1,7 +1,9 @@
 package com.bootcamp2024.StockMicroservice.application.mapper;
 
+import com.bootcamp2024.StockMicroservice.application.dto.response.BrandResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
+import com.bootcamp2024.StockMicroservice.domain.model.Brand;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import org.mapstruct.Mapper;
@@ -23,4 +25,5 @@ public interface PaginationResponseMapper {
     @Mapping(source = "last", target = "last")
     PaginationResponse<CategoryResponse> paginationCustomToGetAllCategories(PaginationCustom<Category> paginationCustom);
 
+    PaginationResponse<BrandResponse> toBrandPaginationResponse(PaginationCustom<Brand> paginationCustom);
 }

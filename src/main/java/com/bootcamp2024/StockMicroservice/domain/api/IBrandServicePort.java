@@ -1,8 +1,7 @@
 package com.bootcamp2024.StockMicroservice.domain.api;
 
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
-
-import com.bootcamp2024.StockMicroservice.domain.model.BrandPaginationCustom;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 
 
 public interface IBrandServicePort {
@@ -13,7 +12,7 @@ public interface IBrandServicePort {
 
     Brand findById(Long brandId);
 
-    BrandPaginationCustom getAllaBrands(int page, int size, boolean ord);
+    PaginationCustom<Brand> getAllBrands(int page, int size, boolean ord);
 
 
 }
