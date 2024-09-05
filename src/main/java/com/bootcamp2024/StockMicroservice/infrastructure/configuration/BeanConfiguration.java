@@ -53,7 +53,7 @@ public class BeanConfiguration {
 
     @Bean
     public IItemPersistencePort itemPersistencePort(){
-        return new ItemAdapter(itemRepository,iItemEntityMapper);
+        return new ItemAdapter(itemRepository,iItemEntityMapper, paginationMapper);
     }
 
 

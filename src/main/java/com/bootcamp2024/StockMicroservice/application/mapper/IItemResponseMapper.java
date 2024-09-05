@@ -1,12 +1,13 @@
 package com.bootcamp2024.StockMicroservice.application.mapper;
 
+import com.bootcamp2024.StockMicroservice.application.dto.response.ItemCategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", uses = {CategoryResponseMapper.class, IBrandResponseMapper.class },
+@Mapper(componentModel = "spring", uses = {ItemCategoryResponse.class, IBrandResponseMapper.class },
         unmappedSourcePolicy = ReportingPolicy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IItemResponseMapper {

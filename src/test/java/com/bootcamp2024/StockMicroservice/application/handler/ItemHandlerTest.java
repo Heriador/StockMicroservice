@@ -1,15 +1,15 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
-import com.bootcamp2024.StockMicroservice.application.dto.response.BrandResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.*;
 import com.bootcamp2024.StockMicroservice.application.mapper.IItemRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.IItemResponseMapper;
+import com.bootcamp2024.StockMicroservice.application.mapper.PaginationResponseMapper;
 import com.bootcamp2024.StockMicroservice.domain.api.IItemServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +39,9 @@ class ItemHandlerTest {
     @Mock
     private IItemRequestMapper itemRequestMapper;
 
+    @Mock
+    private PaginationResponseMapper paginationResponseMapper;
+
 
     @InjectMocks
     private ItemHandler itemHandler;
@@ -52,7 +55,11 @@ class ItemHandlerTest {
     @Autowired
     private static ItemResponse itemResponse;
 
+    @Autowired
+    private static PaginationCustom<Item> paginationCustom;
 
+    @Autowired
+    private static PaginationResponse<ItemResponse> paginationResponse;
 
     @BeforeAll
     static void beforeAll() {
@@ -74,7 +81,23 @@ class ItemHandlerTest {
         itemResponse.setPrice(addItem.getPrice());
         itemResponse.setStock(addItem.getStock());
         itemResponse.setBrand(Mockito.mock(BrandResponse.class));
-        itemResponse.setCategories(List.of(Mockito.mock(CategoryResponse.class), Mockito.mock(CategoryResponse.class)));
+        itemResponse.setCategories(List.of(Mockito.mock(ItemCategoryResponse.class), Mockito.mock(ItemCategoryResponse.class)));
+
+        paginationCustom = new PaginationCustom<>();
+        paginationCustom.setContent(List.of(item));
+        paginationCustom.setPageNumber(0);
+        paginationCustom.setPageSize(1);
+        paginationCustom.setTotalElements(1L);
+        paginationCustom.setTotalPages(1);
+        paginationCustom.setLast(true);
+
+        paginationResponse = new PaginationResponse<>();
+        paginationResponse.setContent(List.of(itemResponse));
+        paginationResponse.setPageNumber(0);
+        paginationResponse.setPageSize(1);
+        paginationResponse.setTotalElements(1L);
+        paginationResponse.setTotalPages(1);
+        paginationResponse.setLast(true);
 
     }
 
@@ -121,5 +144,22 @@ class ItemHandlerTest {
         assertEquals(itemResponse, result);
 
     }
+
+    @Test
+    @DisplayName("Calling method getAllItems should pass and return the same object that was send in the mock")
+    void getAllItemsShouldPass(){
+
+        when(itemServicePort.getAllItems(0, 10, "name", true)).thenReturn(paginationCustom);
+        when(paginationResponseMapper.toItemPaginationResponse(paginationCustom)).thenReturn(paginationResponse);
+
+        PaginationResponse<ItemResponse> result = itemHandler.getAllItems(0, 10, "name", true);
+
+        verify(itemServicePort, times(1)).getAllItems(0, 10, "name", true);
+        verify(paginationResponseMapper, times(1)).toItemPaginationResponse(paginationCustom);
+
+        assertEquals(paginationResponse, result);
+
+    }
+
 
 }

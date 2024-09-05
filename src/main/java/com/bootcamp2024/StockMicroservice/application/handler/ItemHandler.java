@@ -2,10 +2,13 @@ package com.bootcamp2024.StockMicroservice.application.handler;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
 import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.mapper.IItemRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.IItemResponseMapper;
+import com.bootcamp2024.StockMicroservice.application.mapper.PaginationResponseMapper;
 import com.bootcamp2024.StockMicroservice.domain.api.IItemServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ public class ItemHandler implements IItemHandler{
 
     private final IItemRequestMapper itemRequestMapper;
     private final IItemResponseMapper itemResponseMapper;
+    private final PaginationResponseMapper paginationResponseMapper;
 
 
     @Override
@@ -42,5 +46,13 @@ public class ItemHandler implements IItemHandler{
         Item item = itemServicePort.findById(itemId);
 
         return itemResponseMapper.toItemResponse(item);
+    }
+
+    @Override
+    public PaginationResponse<ItemResponse> getAllItems(int page, int size, String sortParam, boolean ord) {
+
+        PaginationCustom<Item> itemPaginationCustom = itemServicePort.getAllItems(page, size, sortParam, ord);
+
+        return paginationResponseMapper.toItemPaginationResponse(itemPaginationCustom);
     }
 }

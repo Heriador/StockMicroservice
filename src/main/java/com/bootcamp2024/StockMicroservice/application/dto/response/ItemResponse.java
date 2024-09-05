@@ -17,5 +17,5 @@ public class ItemResponse {
     private BigDecimal price;
     private Long stock;
     private BrandResponse brand;
-    private List<CategoryResponse> categories;
+    private List<ItemCategoryResponse> categories;
 }
