@@ -3,9 +3,11 @@ package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper;
 
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
+import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.BrandEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.CategoryEntity;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.ItemEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -28,4 +30,5 @@ public interface PaginationMapper {
 
     PaginationCustom<Brand> toBrandPaginationCustom(Page<BrandEntity> pageable);
 
+    PaginationCustom<Item> toItemPaginationCustom(Page<ItemEntity> pageable);
 }
