@@ -13,7 +13,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 
-@Mapper(componentModel = "spring", uses = {CategoryResponseMapper.class},
+@Mapper(componentModel = "spring", uses = {CategoryResponseMapper.class, IBrandResponseMapper.class, IItemResponseMapper.class},
     unmappedSourcePolicy = ReportingPolicy.IGNORE,
     unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface PaginationResponseMapper {

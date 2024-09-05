@@ -2,9 +2,11 @@ package com.bootcamp2024.StockMicroservice.domain.usecases;
 
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemAlreadyExistException;
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemNotFoundException;
+import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IItemPersistencePort;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +38,9 @@ class ItemUseCasesTest {
     @Autowired
     private static Item item;
 
+    @Autowired
+    private static PaginationCustom<Item> paginationCustom;
+
     @BeforeAll
     static void beforeAll() {
         item = new Item();
@@ -47,6 +52,7 @@ class ItemUseCasesTest {
         item.setBrand(Mockito.mock(Brand.class));
         item.setCategories(List.of(Mockito.mock(Category.class), Mockito.mock(Category.class)));
 
+        paginationCustom = new PaginationCustom<>(List.of(item), 0, 1, 1L, 1, true);
     }
 
     @Test
@@ -110,6 +116,27 @@ class ItemUseCasesTest {
         when(itemPersistencePort.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ItemNotFoundException.class, () -> itemUseCases.findById(1L));
+
+    }
+
+    @Test
+    @DisplayName("Calling useCase getAllItems should Pass and return a pagination response object")
+    void getAllItemsShouldPass(){
+
+            when(itemPersistencePort.getAllItems(0, 10, "name", true)).thenReturn(Optional.of(paginationCustom));
+
+            PaginationCustom<Item> result = itemUseCases.getAllItems(0, 10, "name", true);
+
+            assertEquals(paginationCustom, result);
+    }
+
+    @Test
+    @DisplayName("Calling useCase getAllItems should return emptyList and throw NoDataFoundException")
+    void getAllItemsShouldThrowNoDataFoundException(){
+
+        when(itemPersistencePort.getAllItems(0, 10, "name", true)).thenReturn(Optional.empty());
+
+        assertThrows(NoDataFoundException.class, () -> itemUseCases.getAllItems(0, 10, "name", true));
 
     }
 

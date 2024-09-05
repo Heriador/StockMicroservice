@@ -3,7 +3,9 @@ package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 import com.bootcamp2024.StockMicroservice.domain.model.Brand;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.IItemEntityMapper;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.BrandEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.CategoryEntity;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.ItemEntity;
@@ -17,6 +19,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,6 +41,9 @@ class ItemAdapterTest {
     @Mock
     private IItemEntityMapper itemEntityMapper;
 
+    @Mock
+    private PaginationMapper paginationMapper;
+
     @InjectMocks
     private ItemAdapter itemAdapter;
 
@@ -43,6 +52,8 @@ class ItemAdapterTest {
 
     @Autowired
     private static ItemEntity itemEntity;
+
+    private static PaginationCustom<Item> paginationCustom;
 
 
     @BeforeAll
@@ -65,6 +76,7 @@ class ItemAdapterTest {
         itemEntity.setBrand(Mockito.mock(BrandEntity.class));
         itemEntity.setCategories(List.of(Mockito.mock(CategoryEntity.class), Mockito.mock(CategoryEntity.class)));
 
+        paginationCustom = new PaginationCustom<>(List.of(item), 0, 1, 1L, 1, true);
     }
 
 
@@ -103,7 +115,23 @@ class ItemAdapterTest {
         assertEquals(Optional.of(item), response);
     }
 
+    @Test
+    @DisplayName("Calling method getAllItems should return the same object send in the mock")
+    void getAllItemsShouldPass(){
 
+        Pageable pageable = PageRequest.of(0,10, Sort.by("name").ascending());
+        Page<ItemEntity> itemEntityPage = Mockito.mock(Page.class);
+
+        when(itemRepository.findAll(pageable)).thenReturn(itemEntityPage);
+        when(paginationMapper.toItemPaginationCustom(itemEntityPage)).thenReturn(paginationCustom);
+
+        Optional<PaginationCustom<Item>> result = itemAdapter.getAllItems(0, 10, "name", true);
+
+        verify(itemRepository, times(1)).findAll(pageable);
+        verify(paginationMapper, times(1)).toItemPaginationCustom(itemEntityPage);
+
+        assertEquals(Optional.of(paginationCustom), result);
+    }
 
 
 }

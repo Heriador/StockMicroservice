@@ -1,9 +1,7 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
-import com.bootcamp2024.StockMicroservice.application.dto.response.BrandResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
-import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.*;
 import com.bootcamp2024.StockMicroservice.application.handler.ItemHandler;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -39,6 +37,8 @@ class ItemRestControllerTest {
 
     private static ItemResponse itemResponse;
 
+    private static PaginationResponse<ItemResponse> paginationResponse;
+
     @BeforeAll
     static void beforeAll() {
 
@@ -57,7 +57,10 @@ class ItemRestControllerTest {
             itemResponse.setPrice(addItem.getPrice());
             itemResponse.setStock(addItem.getStock());
             itemResponse.setBrand(Mockito.mock(BrandResponse.class));
-            itemResponse.setCategories(List.of(Mockito.mock(CategoryResponse.class), Mockito.mock(CategoryResponse.class)));
+            itemResponse.setCategories(List.of(Mockito.mock(ItemCategoryResponse.class), Mockito.mock(ItemCategoryResponse.class)));
+
+            paginationResponse = new PaginationResponse<>(List.of(itemResponse), 0, 1, 1L, 1, true);
+
     }
 
     @Test
@@ -100,6 +103,21 @@ class ItemRestControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(itemResponse, response.getBody());
+    }
+
+    @Test
+    @DisplayName("Calling method getAllItems should pass and return the same object send in the mock")
+    void getAllItemsShouldPass(){
+
+            when(itemHandler.getAllItems(0, 10, "name" ,true)).thenReturn(paginationResponse);
+
+            ResponseEntity<PaginationResponse<ItemResponse>> response = itemRestController.getAllItems(0, 10,"name" ,true);
+
+            verify(itemHandler, times(1)).getAllItems(0, 10, "name",true);
+
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+            assertEquals(paginationResponse, response.getBody());
+
     }
 
 }
