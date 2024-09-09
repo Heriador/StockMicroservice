@@ -65,22 +65,23 @@ public class ItemRestController {
 
     @Operation(summary = "Get All Items by pagination")
     @Parameters(value = {
-            @Parameter(in = ParameterIn.QUERY,name = "page", description = "Page number to be returned"),
-            @Parameter(in = ParameterIn.QUERY,name = "size", description = "Number of elements per page"),
+            @Parameter(in = ParameterIn.QUERY, name = "page", description = "Page number to be returned"),
+            @Parameter(in = ParameterIn.QUERY, name = "size", description = "Number of elements per page"),
+            @Parameter(in = ParameterIn.QUERY, name = "sortBy", description = "Parameter to sort the results"),
             @Parameter(in = ParameterIn.QUERY, name = "ord", description = "Determines if the results should be ordered ascending(True) or descending(False)")
     })
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "All Items returned",
                     content = @Content(mediaType = "application/json",schema = @Schema(implementation = PaginationResponse.class))),
-            @ApiResponse(responseCode = "404", description = "No data found", content = @Content)
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
     })
     @GetMapping
     public ResponseEntity<PaginationResponse<ItemResponse>> getAllItems(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam int size,
-            @RequestParam String sortParam,
-            @RequestParam(value = "ord", defaultValue = "true") boolean ord){
-        return ResponseEntity.ok(itemHandler.getAllItems(page, size, sortParam, ord));
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1", required = false) int size,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ord){
+        return ResponseEntity.ok(itemHandler.getAllItems(page, size, sortBy, ord));
     }
 
 }

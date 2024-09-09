@@ -30,6 +30,7 @@ public final class DomainConstants {
     public static final String ITEM_FIELD_PRICE_NOT_NULL_MESSAGE = "Field 'price' cannot be empty";
     public static final String ITEM_FIELD_STOCK_NOT_POSITIVE_OR_ZERO_MESSAGE = "Field 'stock' cannot be a negative value ";
     public static final String ITEM_FIELD_STOCK_NOT_NULL_MESSAGE = "Field 'stock' cannot be empty";
+    public static final String ITEM_FIELD_CATEGORIES_NOT_NULL_MESSAGE = "Field 'categories' cannot be empty";
     public static final String ITEM_FIELD_CATEGORIES_OUT_OF_RANK_MESSAGE = "Field 'categories' should have 1 to 3 elements, no more or less";
     public static final String ITEM_FIELD_CATEGORIES_NOT_UNIQUE_MESSAGE = "Field 'categories' should only contain unique elements";
     public static final String ITEM_FIELD_CATEGORIES_NOT_POSITIVE_MESSAGE = "Field 'categories' should only contain positive elements";
