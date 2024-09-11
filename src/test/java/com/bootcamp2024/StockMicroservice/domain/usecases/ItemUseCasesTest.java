@@ -1,10 +1,9 @@
 package com.bootcamp2024.StockMicroservice.domain.usecases;
 
+import com.bootcamp2024.StockMicroservice.Factory.ItemFactory;
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemAlreadyExistException;
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemNotFoundException;
 import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
-import com.bootcamp2024.StockMicroservice.domain.model.Brand;
-import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IItemPersistencePort;
@@ -14,12 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,16 +39,8 @@ class ItemUseCasesTest {
 
     @BeforeAll
     static void beforeAll() {
-        item = new Item();
-        item.setId(1L);
-        item.setName("manzana pinto");
-        item.setDescription("manzana pintosa");
-        item.setPrice(BigDecimal.valueOf(18.9));
-        item.setStock(10L);
-        item.setBrand(Mockito.mock(Brand.class));
-        item.setCategories(List.of(Mockito.mock(Category.class), Mockito.mock(Category.class)));
-
-        paginationCustom = new PaginationCustom<>(List.of(item), 0, 1, 1L, 1, true);
+        item = ItemFactory.getItem();
+        paginationCustom = ItemFactory.getPaginationCustom();
     }
 
     @Test

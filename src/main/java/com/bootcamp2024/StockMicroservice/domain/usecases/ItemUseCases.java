@@ -7,6 +7,8 @@ import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IItemPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.util.ItemValidator;
+import com.bootcamp2024.StockMicroservice.domain.util.PaginationValidator;
 
 public class ItemUseCases implements IItemServicePort {
 
@@ -23,6 +25,7 @@ public class ItemUseCases implements IItemServicePort {
             throw new ItemAlreadyExistException("Item already exist");
         }
 
+        ItemValidator.validate(item);
 
         this.itemPersistencePort.saveItem(item);
     }
@@ -38,7 +41,8 @@ public class ItemUseCases implements IItemServicePort {
     }
 
     @Override
-    public PaginationCustom<Item> getAllItems(int page, int size, String sortParam, boolean ord) {
-        return itemPersistencePort.getAllItems(page, size, sortParam, ord).orElseThrow(NoDataFoundException::new);
+    public PaginationCustom<Item> getAllItems(int page, int size, String sortBy, boolean ord) {
+        PaginationValidator.validate(page, size, sortBy);
+        return itemPersistencePort.getAllItems(page, size, sortBy, ord).orElseThrow(NoDataFoundException::new);
     }
 }

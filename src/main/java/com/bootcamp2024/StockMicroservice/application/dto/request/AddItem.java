@@ -22,17 +22,16 @@ public class AddItem {
     private String description;
 
     @NotNull(message = DomainConstants.ITEM_FIELD_PRICE_NOT_NULL_MESSAGE)
-    @PositiveOrZero(message = DomainConstants.ITEM_FIELD_PRICE_NOT_POSITIVE_OR_ZERO_MESSAGE)
     private BigDecimal price;
 
     @NotNull(message = DomainConstants.ITEM_FIELD_STOCK_NOT_NULL_MESSAGE)
-    @PositiveOrZero(message = DomainConstants.ITEM_FIELD_STOCK_NOT_POSITIVE_OR_ZERO_MESSAGE)
     private Long stock;
 
     @NotNull(message = DomainConstants.ADDITEM_FIELD_BRANDID_NOT_NULL_MESSAGE)
     @Positive(message = DomainConstants.ADDITEM_FIELD_BRANDID_NOT_POSITIVE_MESSAGE)
     private Long brandId;
 
+    @NotNull(message = DomainConstants.ITEM_FIELD_CATEGORIES_NOT_NULL_MESSAGE)
     @Size(min=DomainConstants.ITEM_FIELD_CATEGORIES_MIN,
           max = DomainConstants.ITEM_FIELD_CATEGORIES_MAX,
           message = DomainConstants.ITEM_FIELD_CATEGORIES_OUT_OF_RANK_MESSAGE)

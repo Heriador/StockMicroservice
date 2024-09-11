@@ -53,9 +53,6 @@ public class ItemAdapter implements IItemPersistencePort {
 
         Page<ItemEntity> itemEntityPage = itemRepository.findAll(pageable);
 
-        if(itemEntityPage.isEmpty()){
-            return Optional.empty();
-        }
 
         PaginationCustom<Item> itemPaginationCustom = paginationMapper.toItemPaginationCustom(itemEntityPage);
 
