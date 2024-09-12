@@ -6,6 +6,7 @@ import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.IItemHandler;
 import com.bootcamp2024.StockMicroservice.infrastructure.configuration.exceptionHandler.ExceptionResponse;
+import com.bootcamp2024.StockMicroservice.infrastructure.input.rest.util.RolePermissionConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -18,6 +19,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,12 +34,14 @@ public class ItemRestController {
             @ApiResponse(responseCode = "201", description = "Item created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddItem.class))),
             @ApiResponse(responseCode = "409", description = "Item already exists", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExceptionResponse.class)))
     })
+    @PreAuthorize(RolePermissionConstants.HAS_ROLE_ADMIN)
     @PostMapping
     public ResponseEntity<Void> createItem(@RequestBody @Valid AddItem addItem){
         itemHandler.createItem(addItem);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 
     @Operation(summary = "Get a Item by name")
     @ApiResponses(value = {
