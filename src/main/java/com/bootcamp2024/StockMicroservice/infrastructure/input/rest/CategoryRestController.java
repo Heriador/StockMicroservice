@@ -4,6 +4,7 @@ import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
 import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.ICategoryHandler;
+import com.bootcamp2024.StockMicroservice.infrastructure.input.rest.util.RolePermissionConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -16,6 +17,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,6 +33,7 @@ public class CategoryRestController {
             @ApiResponse(responseCode = "409", description = "Category already exists", content = @Content)
     })
     @PostMapping
+    @PreAuthorize(RolePermissionConstants.HAS_ROLE_ADMIN)
     public ResponseEntity<Void> createCategory(@RequestBody @Valid AddCategory addCategory){
         categoryHandler.createCategory(addCategory);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -6,6 +6,7 @@ import com.bootcamp2024.StockMicroservice.application.dto.request.AddBrand;
 import com.bootcamp2024.StockMicroservice.application.dto.response.BrandResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.IBrandHandler;
+import com.bootcamp2024.StockMicroservice.infrastructure.input.rest.util.RolePermissionConstants;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,6 +23,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,6 +39,7 @@ public class BrandRestController {
             @ApiResponse(responseCode = "201", description = "Brand created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AddBrand.class))),
             @ApiResponse(responseCode = "409", description = "Brand already exists", content = @Content)
     })
+    @PreAuthorize(RolePermissionConstants.HAS_ROLE_ADMIN)
     @PostMapping
     public ResponseEntity<Void> createBrand(@RequestBody @Valid AddBrand addBrand){
         brandHandler.createBrand(addBrand);
