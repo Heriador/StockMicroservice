@@ -1,6 +1,6 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration.security;
 
-import com.bootcamp2024.StockMicroservice.infrastructure.configuration.security.filter.JwtService;
+import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.util.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,10 +23,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String jwt) throws UsernameNotFoundException {
         String email = jwtService.extractEmail(jwt);
-        String role = jwtService.extractRole(jwt);
+        String role = jwtService.extractAuthorities(jwt);
 
 
-        Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_"+role));
+        Collection<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
 
         return new User(email,"", authorities);
     }

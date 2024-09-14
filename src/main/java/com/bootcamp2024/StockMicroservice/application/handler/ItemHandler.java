@@ -1,6 +1,7 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddStock;
 import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.mapper.IItemRequestMapper;
@@ -11,11 +12,9 @@ import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ItemHandler implements IItemHandler{
 
 
@@ -54,5 +53,10 @@ public class ItemHandler implements IItemHandler{
         PaginationCustom<Item> itemPaginationCustom = itemServicePort.getAllItems(page, size, sortParam, ord);
 
         return paginationResponseMapper.toItemPaginationResponse(itemPaginationCustom);
+    }
+
+    @Override
+    public void addStock(Long itemId, AddStock addStock) {
+        itemServicePort.addStock(itemId, addStock.getQuantity());
     }
 }

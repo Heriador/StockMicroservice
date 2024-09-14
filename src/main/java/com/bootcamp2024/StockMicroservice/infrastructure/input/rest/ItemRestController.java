@@ -2,6 +2,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddStock;
 import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.IItemHandler;
@@ -86,6 +87,13 @@ public class ItemRestController {
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestParam(defaultValue = "true") boolean ord){
         return ResponseEntity.ok(itemHandler.getAllItems(page, size, sortBy, ord));
+    }
+
+    @PreAuthorize(RolePermissionConstants.HAS_ROLE_WAREHOUSE_ASSISTANT)
+    @PatchMapping("/stock/{itemId}")
+    public ResponseEntity<Void> addStock(@PathVariable Long itemId, @RequestBody AddStock addStock){
+        itemHandler.addStock(itemId, addStock);
+        return ResponseEntity.ok().build();
     }
 
 }

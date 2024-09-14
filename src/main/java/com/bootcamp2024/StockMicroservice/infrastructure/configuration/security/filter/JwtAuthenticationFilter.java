@@ -1,6 +1,7 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration.security.filter;
 
 import com.bootcamp2024.StockMicroservice.infrastructure.configuration.security.CustomUserDetailsService;
+import com.bootcamp2024.StockMicroservice.infrastructure.configuration.util.AuthenticationConstants;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,23 +23,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(AuthenticationConstants.AUTHORIZATION_HEADER);
 
 
-        if(authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if(authHeader == null || !authHeader.startsWith(AuthenticationConstants.BEARER_PREFIX)) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String jwt = authHeader.split(" ")[1];
+        try{
 
-        UserDetails user = userDetailsService.loadUserByUsername(jwt);
+            String jwt = authHeader.split(" ")[1];
+
+            UserDetails user = userDetailsService.loadUserByUsername(jwt);
 
 
 
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,jwt, user.getAuthorities());
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user,jwt, user.getAuthorities());
 
-        SecurityContextHolder.getContext().setAuthentication(authToken);
+            SecurityContextHolder.getContext().setAuthentication(authToken);
+
+
+        }
+        catch (Exception e){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, AuthenticationConstants.INVALID_TOKEN_MESSAGE);
+            return;
+        }
+
         filterChain.doFilter(request, response);
 
     }

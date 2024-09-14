@@ -4,9 +4,11 @@ import com.bootcamp2024.StockMicroservice.domain.api.IItemServicePort;
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemAlreadyExistException;
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemNotFoundException;
 import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
+import com.bootcamp2024.StockMicroservice.domain.exception.QuantityNegativeException;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IItemPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 import com.bootcamp2024.StockMicroservice.domain.util.ItemValidator;
 import com.bootcamp2024.StockMicroservice.domain.util.PaginationValidator;
 
@@ -44,5 +46,17 @@ public class ItemUseCases implements IItemServicePort {
     public PaginationCustom<Item> getAllItems(int page, int size, String sortBy, boolean ord) {
         PaginationValidator.validate(page, size, sortBy);
         return itemPersistencePort.getAllItems(page, size, sortBy, ord).orElseThrow(NoDataFoundException::new);
+    }
+
+    @Override
+    public void addStock(Long itemId, int quantity) {
+
+        if(quantity < 0){
+            throw new QuantityNegativeException(DomainConstants.QUANTITY_NOT_POSITIVE_MESSAGE);
+        }
+
+        Item item = itemPersistencePort.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
+        itemPersistencePort.addStock(item, quantity);
     }
 }

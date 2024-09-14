@@ -10,5 +10,7 @@ public interface IItemServicePort {
 
     Item findById(Long itemId);
 
+    void addStock(Long itemId, int quantity);
+
     PaginationCustom<Item> getAllItems(int page, int size, String sortParam, boolean ord);
 }

@@ -12,5 +12,7 @@ public interface IItemPersistencePort {
 
     Optional<Item> findById(Long itemId);
 
+    void addStock(Item item, int quantity);
+
     Optional<PaginationCustom<Item>> getAllItems(int page, int size, String sortParam, boolean ord);
 }
