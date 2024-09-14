@@ -1,4 +1,4 @@
-package com.bootcamp2024.StockMicroservice.infrastructure.configuration.security.filter;
+package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.util;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -26,8 +26,8 @@ public class JwtService {
 
     }
 
-    public String extractRole(String jwt) {
-        return extractAllClaims(jwt).get("role").toString();
+    public String extractAuthorities(String jwt) {
+        return extractAllClaims(jwt).get("authorities").toString();
     }
 
 

@@ -1,7 +1,7 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.configuration.exceptionHandler;
 
 import com.bootcamp2024.StockMicroservice.domain.exception.*;
-import com.bootcamp2024.StockMicroservice.infrastructure.configuration.Constants;
+import com.bootcamp2024.StockMicroservice.infrastructure.configuration.util.Constants;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

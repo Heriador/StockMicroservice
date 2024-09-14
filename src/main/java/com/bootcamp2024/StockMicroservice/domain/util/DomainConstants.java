@@ -36,4 +36,8 @@ public final class DomainConstants {
     public static final String ITEM_FIELD_CATEGORIES_NOT_POSITIVE_MESSAGE = "Field 'categories' should only contain positive elements";
     public static final String ADDITEM_FIELD_BRANDID_NOT_POSITIVE_MESSAGE = "Field 'brandId' can only be a positive value";
     public static final String ADDITEM_FIELD_BRANDID_NOT_NULL_MESSAGE = "Field 'brandId' cannot be empty";
+
+    public static final String QUANTITY_NOT_POSITIVE_MESSAGE = "Quantity must be greater than 0";
+    public static final String QUANTITY_NULL_MESSAGE = "Quantity is required";
+
 }

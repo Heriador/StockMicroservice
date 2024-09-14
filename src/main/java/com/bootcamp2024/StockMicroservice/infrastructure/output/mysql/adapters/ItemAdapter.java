@@ -12,10 +12,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Transactional
 public class ItemAdapter implements IItemPersistencePort {
 
     private final IItemRepository itemRepository;
@@ -43,6 +46,14 @@ public class ItemAdapter implements IItemPersistencePort {
         return itemEntity.map(itemEntityMapper::itemEntityToItem);
     }
 
+    @Modifying
+    @Override
+    public void addStock(Item item, int quantity) {
+        item.setStock(item.getStock() + quantity);
+
+        itemRepository.save(itemEntityMapper.itemToItemEntity(item));
+    }
+
     @Override
     public Optional<PaginationCustom<Item>> getAllItems(int page, int size, String sortParam, boolean ord) {
 
@@ -60,4 +71,5 @@ public class ItemAdapter implements IItemPersistencePort {
 
         return Optional.of(itemPaginationCustom);
     }
+
 }

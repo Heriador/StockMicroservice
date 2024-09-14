@@ -1,4 +1,4 @@
-package com.bootcamp2024.StockMicroservice.infrastructure.configuration;
+package com.bootcamp2024.StockMicroservice.infrastructure.configuration.util;
 
 public class Constants {
     private Constants() {
