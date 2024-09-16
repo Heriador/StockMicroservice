@@ -1,6 +1,7 @@
 package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddStock;
 import com.bootcamp2024.StockMicroservice.application.dto.response.*;
 import com.bootcamp2024.StockMicroservice.application.handler.ItemHandler;
 import org.junit.jupiter.api.BeforeAll;
@@ -118,6 +119,22 @@ class ItemRestControllerTest {
             assertEquals(HttpStatus.OK, response.getStatusCode());
             assertEquals(paginationResponse, response.getBody());
 
+    }
+
+    @Test
+    @DisplayName("Calling method addStock should pass")
+    void addStockShouldPass(){
+
+            AddStock addStock = new AddStock();
+            addStock.setQuantity(10);
+
+            doNothing().when(itemHandler).addStock(1L, addStock);
+
+            ResponseEntity<Void> response = itemRestController.addStock(1L, addStock);
+
+            verify(itemHandler, times(1)).addStock(1L, addStock);
+
+            assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
 }
