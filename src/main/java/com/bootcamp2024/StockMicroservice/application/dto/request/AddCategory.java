@@ -3,13 +3,13 @@ package com.bootcamp2024.StockMicroservice.application.dto.request;
 import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddCategory {
 
     @NotBlank(message = DomainConstants.FIELD_NAME_BLANK_MESSAGE)

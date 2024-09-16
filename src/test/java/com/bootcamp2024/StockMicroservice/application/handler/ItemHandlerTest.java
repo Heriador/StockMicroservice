@@ -1,13 +1,13 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
+import com.bootcamp2024.StockMicroservice.Factory.ItemFactory;
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
+import com.bootcamp2024.StockMicroservice.application.dto.request.AddStock;
 import com.bootcamp2024.StockMicroservice.application.dto.response.*;
 import com.bootcamp2024.StockMicroservice.application.mapper.IItemRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.IItemResponseMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.PaginationResponseMapper;
 import com.bootcamp2024.StockMicroservice.domain.api.IItemServicePort;
-import com.bootcamp2024.StockMicroservice.domain.model.Brand;
-import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,12 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -64,40 +61,14 @@ class ItemHandlerTest {
     @BeforeAll
     static void beforeAll() {
 
-        addItem = new AddItem();
-        addItem.setName("manzana pinto");
-        addItem.setDescription("manzana pintosa");
-        addItem.setPrice(BigDecimal.valueOf(18.9));
-        addItem.setStock(10L);
-        addItem.setBrandId(1L);
-        addItem.setCategories(List.of(1L, 2L));
+        addItem = ItemFactory.getAddItem();
+        item = ItemFactory.getItem();
 
-        item = new Item(1L, "manzana pinto", "manzana pintosa", BigDecimal.valueOf(18.9), 10L, Mockito.mock(Brand.class), List.of(Mockito.mock(Category.class), Mockito.mock(Category.class)));
+        itemResponse = ItemFactory.getItemResponse();
 
-        itemResponse = new ItemResponse();
-        itemResponse.setId(1L);
-        itemResponse.setName(addItem.getName());
-        itemResponse.setDescription(addItem.getDescription());
-        itemResponse.setPrice(addItem.getPrice());
-        itemResponse.setStock(addItem.getStock());
-        itemResponse.setBrand(Mockito.mock(BrandResponse.class));
-        itemResponse.setCategories(List.of(Mockito.mock(ItemCategoryResponse.class), Mockito.mock(ItemCategoryResponse.class)));
+        paginationCustom = ItemFactory.getPaginationCustom();
 
-        paginationCustom = new PaginationCustom<>();
-        paginationCustom.setContent(List.of(item));
-        paginationCustom.setPageNumber(0);
-        paginationCustom.setPageSize(1);
-        paginationCustom.setTotalElements(1L);
-        paginationCustom.setTotalPages(1);
-        paginationCustom.setLast(true);
-
-        paginationResponse = new PaginationResponse<>();
-        paginationResponse.setContent(List.of(itemResponse));
-        paginationResponse.setPageNumber(0);
-        paginationResponse.setPageSize(1);
-        paginationResponse.setTotalElements(1L);
-        paginationResponse.setTotalPages(1);
-        paginationResponse.setLast(true);
+        paginationResponse = ItemFactory.getPaginationResponse();
 
     }
 
@@ -159,6 +130,20 @@ class ItemHandlerTest {
 
         assertEquals(paginationResponse, result);
 
+    }
+
+    @Test
+    @DisplayName("Calling method addStock should pass")
+    void addStockShouldPass(){
+
+            AddStock addStock = new AddStock();
+            addStock.setQuantity(10);
+
+            doNothing().when(itemServicePort).addStock(1L, 10);
+
+            itemHandler.addStock(1L, addStock);
+
+            verify(itemServicePort, times(1)).addStock(1L, 10);
     }
 
 

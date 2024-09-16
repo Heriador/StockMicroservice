@@ -4,6 +4,7 @@ import com.bootcamp2024.StockMicroservice.Factory.ItemFactory;
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemAlreadyExistException;
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemNotFoundException;
 import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
+import com.bootcamp2024.StockMicroservice.domain.exception.QuantityNegativeException;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IItemPersistencePort;
@@ -62,6 +63,16 @@ class ItemUseCasesTest {
         when(itemPersistencePort.findByName(item.getName())).thenReturn(Optional.of(item));
 
         assertThrows(ItemAlreadyExistException.class, () -> itemUseCases.saveItem(item));
+
+    }
+
+    @Test
+    @DisplayName("Calling useCase saveItem should throw ValidationException")
+    void saveItemShouldThrowValidationException(){
+
+        item.setPrice(null);
+
+        assertThrows(NullPointerException.class, () -> itemUseCases.saveItem(item));
 
     }
 
@@ -125,6 +136,37 @@ class ItemUseCasesTest {
         when(itemPersistencePort.getAllItems(0, 10, "name", true)).thenReturn(Optional.empty());
 
         assertThrows(NoDataFoundException.class, () -> itemUseCases.getAllItems(0, 10, "name", true));
+
+    }
+
+    @Test
+    @DisplayName("Calling useCase addStock should Pass")
+    void addStockShouldPass(){
+
+            when(itemPersistencePort.findById(1L)).thenReturn(Optional.of(item));
+
+            doNothing().when(itemPersistencePort).addStock(item, 10);
+
+            itemUseCases.addStock(1L, 10);
+
+            verify(itemPersistencePort, times(1)).addStock(item, 10);
+    }
+
+    @Test
+    @DisplayName("Calling useCase addStock should throw ItemNotFoundException")
+    void addStockShouldThrowItemNotFoundException(){
+
+        when(itemPersistencePort.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(ItemNotFoundException.class, () -> itemUseCases.addStock(1L, 10));
+
+    }
+
+    @Test
+    @DisplayName("Calling useCase addStock should throw QuantityNegativeException")
+    void addStockShouldThrowQuantityNegativeException(){
+
+        assertThrows(QuantityNegativeException.class, () -> itemUseCases.addStock(1L, -10));
 
     }
 

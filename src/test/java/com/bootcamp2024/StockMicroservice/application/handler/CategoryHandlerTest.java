@@ -1,18 +1,23 @@
 package com.bootcamp2024.StockMicroservice.application.handler;
 
+import com.bootcamp2024.StockMicroservice.Factory.CategoryFactory;
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddCategory;
 import com.bootcamp2024.StockMicroservice.application.dto.response.CategoryResponse;
+import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryRequestMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.CategoryResponseMapper;
 import com.bootcamp2024.StockMicroservice.application.mapper.PaginationResponseMapper;
 import com.bootcamp2024.StockMicroservice.domain.api.ICategoryServicePort;
 import com.bootcamp2024.StockMicroservice.domain.model.Category;
 
+import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -58,5 +63,28 @@ class CategoryHandlerTest {
         assertEquals(categoryResponse, result);
         verify(categoryServicePort, times(1)).findByName("computadoras");
         verify(categoryResponseMapper, times(1)).toResponse(category);
+    }
+
+    @Test
+    void getAllcategories() {
+        Category category = new Category(1L,"computadoras","para entrar a internet");
+        PaginationCustom<Category> paginationCustom = new PaginationCustom<>(List.of(category),0,1,1L,1,true);
+        PaginationResponse<CategoryResponse> paginationResponse = new PaginationResponse<>();
+        paginationResponse.setContent(List.of(CategoryFactory.getCategoryResponse()));
+        paginationResponse.setPageNumber(paginationCustom.getPageNumber());
+        paginationResponse.setPageSize(paginationCustom.getPageSize());
+        paginationResponse.setTotalElements(paginationCustom.getTotalElements());
+        paginationResponse.setTotalPages(paginationCustom.getTotalPages());
+        paginationResponse.setLast(paginationCustom.isLast());
+
+        when(paginationResponseMapper.paginationCustomToGetAllCategories(paginationCustom)).thenReturn(paginationResponse);
+        when(categoryServicePort.getAllCategories(1, 1, true)).thenReturn(paginationCustom);
+
+        PaginationResponse<CategoryResponse> result = categoryHandler.getAllcategories(1, 1, true);
+
+        assertEquals(paginationResponse, result);
+
+        verify(categoryServicePort, times(1)).getAllCategories(1, 1, true);
+        verify(paginationResponseMapper, times(1)).paginationCustomToGetAllCategories(paginationCustom);
     }
 }
