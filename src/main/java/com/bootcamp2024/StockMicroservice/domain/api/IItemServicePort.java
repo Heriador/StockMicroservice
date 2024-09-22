@@ -3,6 +3,8 @@ package com.bootcamp2024.StockMicroservice.domain.api;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 
+import java.util.List;
+
 public interface IItemServicePort {
     void saveItem(Item item);
 
@@ -13,4 +15,10 @@ public interface IItemServicePort {
     void addStock(Long itemId, int quantity);
 
     PaginationCustom<Item> getAllItems(int page, int size, String sortParam, boolean ord);
+
+    Boolean existsById(Long itemId);
+
+    Boolean hasStock(Long itemId, Long quantity);
+
+    List<String> getCategories(Long itemId);
 }

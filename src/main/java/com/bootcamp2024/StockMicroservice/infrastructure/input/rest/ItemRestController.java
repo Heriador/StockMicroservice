@@ -23,6 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/item/")
 @RequiredArgsConstructor
@@ -68,6 +70,16 @@ public class ItemRestController {
         return ResponseEntity.ok(itemHandler.findById(itemId));
     }
 
+    @GetMapping("/{itemId}")
+    public ResponseEntity<Boolean> existsById(@PathVariable Long itemId){
+        return ResponseEntity.ok(itemHandler.existsById(itemId));
+    }
+
+    @GetMapping("/{itemId}/{quantity}")
+    public ResponseEntity<Boolean> hasStock(@PathVariable Long itemId, @PathVariable Long quantity){
+        return ResponseEntity.ok(itemHandler.hasStock(itemId, quantity));
+    }
+
     @Operation(summary = "Get All Items by pagination")
     @Parameters(value = {
             @Parameter(in = ParameterIn.QUERY, name = "page", description = "Page number to be returned"),
@@ -94,6 +106,11 @@ public class ItemRestController {
     public ResponseEntity<Void> addStock(@PathVariable Long itemId, @RequestBody AddStock addStock){
         itemHandler.addStock(itemId, addStock);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/categories/{itemId}")
+    public ResponseEntity<List<String>> getCategories(@PathVariable Long itemId){
+        return ResponseEntity.ok(itemHandler.getCategories(itemId));
     }
 
 }

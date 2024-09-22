@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface IItemRepository extends JpaRepository<ItemEntity, Long> {
     Optional<ItemEntity> findByName(String itemName);
+
+    Boolean existsByIdAndStockGreaterThanEqual(Long itemId, Long quantity);
 }

@@ -13,6 +13,8 @@ import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ItemHandler implements IItemHandler{
@@ -58,5 +60,20 @@ public class ItemHandler implements IItemHandler{
     @Override
     public void addStock(Long itemId, AddStock addStock) {
         itemServicePort.addStock(itemId, addStock.getQuantity());
+    }
+
+    @Override
+    public Boolean existsById(Long itemId) {
+        return itemServicePort.existsById(itemId);
+    }
+
+    @Override
+    public Boolean hasStock(Long itemId, Long quantity) {
+        return itemServicePort.hasStock(itemId, quantity);
+    }
+
+    @Override
+    public List<String> getCategories(Long itemId) {
+        return itemServicePort.getCategories(itemId);
     }
 }

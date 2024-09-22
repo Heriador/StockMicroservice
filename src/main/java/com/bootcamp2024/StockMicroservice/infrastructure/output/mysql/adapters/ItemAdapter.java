@@ -72,4 +72,13 @@ public class ItemAdapter implements IItemPersistencePort {
         return Optional.of(itemPaginationCustom);
     }
 
+    @Override
+    public Boolean existsById(Long itemId) {
+        return itemRepository.existsById(itemId);
+    }
+
+    @Override
+    public Boolean hasStock(Long itemId, Long quantity) {
+        return itemRepository.existsByIdAndStockGreaterThanEqual(itemId, quantity);
+    }
 }
