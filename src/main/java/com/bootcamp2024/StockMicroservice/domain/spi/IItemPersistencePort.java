@@ -15,4 +15,8 @@ public interface IItemPersistencePort {
     void addStock(Item item, int quantity);
 
     Optional<PaginationCustom<Item>> getAllItems(int page, int size, String sortParam, boolean ord);
+
+    Boolean existsById(Long itemId);
+
+    Boolean hasStock(Long itemId, Long quantity);
 }

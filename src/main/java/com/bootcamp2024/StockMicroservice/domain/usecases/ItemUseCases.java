@@ -5,12 +5,15 @@ import com.bootcamp2024.StockMicroservice.domain.exception.ItemAlreadyExistExcep
 import com.bootcamp2024.StockMicroservice.domain.exception.ItemNotFoundException;
 import com.bootcamp2024.StockMicroservice.domain.exception.NoDataFoundException;
 import com.bootcamp2024.StockMicroservice.domain.exception.QuantityNegativeException;
+import com.bootcamp2024.StockMicroservice.domain.model.Category;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IItemPersistencePort;
 import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 import com.bootcamp2024.StockMicroservice.domain.util.ItemValidator;
 import com.bootcamp2024.StockMicroservice.domain.util.PaginationValidator;
+
+import java.util.List;
 
 public class ItemUseCases implements IItemServicePort {
 
@@ -51,12 +54,30 @@ public class ItemUseCases implements IItemServicePort {
     @Override
     public void addStock(Long itemId, int quantity) {
 
-        if(quantity < 0){
+        if(quantity <= 0){
             throw new QuantityNegativeException(DomainConstants.QUANTITY_NOT_POSITIVE_MESSAGE);
         }
 
         Item item = itemPersistencePort.findById(itemId).orElseThrow(ItemNotFoundException::new);
 
         itemPersistencePort.addStock(item, quantity);
+    }
+
+    @Override
+    public Boolean existsById(Long itemId) {
+        return itemPersistencePort.existsById(itemId);
+    }
+
+    @Override
+    public Boolean hasStock(Long itemId, Long quantity) {
+        return itemPersistencePort.hasStock(itemId, quantity);
+    }
+
+    @Override
+    public List<String> getCategories(Long itemId) {
+
+        Item item = itemPersistencePort.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
+          return item.getCategories().stream().map(Category::getName).toList();
     }
 }
