@@ -3,6 +3,7 @@ package com.bootcamp2024.StockMicroservice.domain.spi;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IItemPersistencePort {
@@ -19,4 +20,6 @@ public interface IItemPersistencePort {
     Boolean existsById(Long itemId);
 
     Boolean hasStock(Long itemId, Long quantity);
+
+    Optional<PaginationCustom<Item>> getItemsPaginatedById(Integer page, Integer size, Boolean ord, String sortBy,List<Long> itemIds, String filterByCategoryName, String filterByBrandName);
 }

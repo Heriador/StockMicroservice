@@ -20,15 +20,15 @@ import org.springframework.data.domain.Page;
 public interface PaginationMapper {
 
 
-    @Mapping(target = "content", source = "content")
     @Mapping(target = "pageNumber", source = "number")
     @Mapping(target = "pageSize", source = "size")
-    @Mapping(target = "totalElements", source = "totalElements")
-    @Mapping(target = "totalPages", source = "totalPages")
-    @Mapping(target = "last", source = "last")
     PaginationCustom<Category> toPaginationCustom(Page<CategoryEntity> pageable);
 
+    @Mapping(target = "pageNumber", source = "number")
+    @Mapping(target = "pageSize", source = "size")
     PaginationCustom<Brand> toBrandPaginationCustom(Page<BrandEntity> pageable);
 
+    @Mapping(target = "pageNumber", source = "number")
+    @Mapping(target = "pageSize", source = "size")
     PaginationCustom<Item> toItemPaginationCustom(Page<ItemEntity> pageable);
 }

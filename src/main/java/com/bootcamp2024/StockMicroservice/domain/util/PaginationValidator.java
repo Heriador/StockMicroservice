@@ -20,7 +20,7 @@ public class PaginationValidator {
         if(size < PaginationConstants.MIN_PAGE_SIZE){
             errors.put("size", PaginationConstants.PAGE_SIZE_LOWER_THAN_MIN);
         }
-        if(!SortByValidator.isValid(sortBy.toUpperCase())){
+        if(!SortByValidator.isValid(sortBy.toLowerCase())){
             errors.put("sortBy", PaginationConstants.INVALID_SORT_BY);
         }
         if(!errors.isEmpty()){

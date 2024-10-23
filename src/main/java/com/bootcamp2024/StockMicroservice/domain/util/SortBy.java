@@ -3,8 +3,8 @@ package com.bootcamp2024.StockMicroservice.domain.util;
 public enum SortBy {
 
     NAME("name"),
-    BRAND("brand.name"),
-    CATEGORY("categories.name");
+    BRAND("brand"),
+    CATEGORY("categories");
 
     private final String fieldName;
 

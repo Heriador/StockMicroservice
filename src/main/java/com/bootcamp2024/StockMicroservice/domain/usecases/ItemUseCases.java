@@ -13,6 +13,7 @@ import com.bootcamp2024.StockMicroservice.domain.util.DomainConstants;
 import com.bootcamp2024.StockMicroservice.domain.util.ItemValidator;
 import com.bootcamp2024.StockMicroservice.domain.util.PaginationValidator;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ItemUseCases implements IItemServicePort {
@@ -79,5 +80,29 @@ public class ItemUseCases implements IItemServicePort {
         Item item = itemPersistencePort.findById(itemId).orElseThrow(ItemNotFoundException::new);
 
           return item.getCategories().stream().map(Category::getName).toList();
+    }
+
+    @Override
+    public PaginationCustom<Item> getItemsPaginatedById(Integer page, Integer size, Boolean ord, String sortBy,List<Long> itemIds, String filterByCategoryName, String filterByBrandName) {
+        PaginationValidator.validate(page, size, sortBy);
+        return itemPersistencePort.getItemsPaginatedById(page, size, ord,sortBy, itemIds, filterByCategoryName, filterByBrandName).orElseThrow(NoDataFoundException::new);
+    }
+
+    @Override
+    public BigDecimal getPriceById(Long itemId) {
+        return itemPersistencePort.findById(itemId).orElseThrow(ItemNotFoundException::new).getPrice();
+    }
+
+    @Override
+    public void sellItem(Long itemId, Integer quantity) {
+        if(quantity <= 0){
+            throw new QuantityNegativeException(DomainConstants.QUANTITY_NOT_POSITIVE_MESSAGE);
+        }
+
+        Item item = itemPersistencePort.findById(itemId).orElseThrow(ItemNotFoundException::new);
+
+        item.setStock(item.getStock() - quantity);
+
+        itemPersistencePort.saveItem(item);
     }
 }

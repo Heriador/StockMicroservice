@@ -3,6 +3,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.input.rest;
 
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddItem;
 import com.bootcamp2024.StockMicroservice.application.dto.request.AddStock;
+import com.bootcamp2024.StockMicroservice.application.dto.request.ItemCartRequest;
 import com.bootcamp2024.StockMicroservice.application.dto.response.ItemResponse;
 import com.bootcamp2024.StockMicroservice.application.dto.response.PaginationResponse;
 import com.bootcamp2024.StockMicroservice.application.handler.IItemHandler;
@@ -23,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -111,6 +113,47 @@ public class ItemRestController {
     @GetMapping("/categories/{itemId}")
     public ResponseEntity<List<String>> getCategories(@PathVariable Long itemId){
         return ResponseEntity.ok(itemHandler.getCategories(itemId));
+    }
+
+    @Operation(summary = "Get Items paginated by Ids")
+    @Parameters(value = {
+            @Parameter(in = ParameterIn.QUERY, name = "page", description = "Page number to be returned"),
+            @Parameter(in = ParameterIn.QUERY, name = "size", description = "Number of elements per page"),
+            @Parameter(in = ParameterIn.QUERY, name = "sortBy", description = "Parameter to sort the results"),
+            @Parameter(in = ParameterIn.QUERY, name = "ord", description = "Determines if the results should be ordered ascending(True) or descending(False)")
+    })
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "All Items returned",
+                    content = @Content(mediaType = "application/json",schema = @Schema(implementation = PaginationResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content)
+    })
+//    @PreAuthorize(RolePermissionConstants.HAS_ROLE_CLIENT)
+    @GetMapping("/items-cart")
+    public ResponseEntity<PaginationResponse<ItemResponse>> getItemsPaginatedById(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "1") Integer size,
+            @RequestParam(defaultValue = "true") Boolean ord,
+            @RequestParam(defaultValue = "name") String sortBy,
+            @RequestBody ItemCartRequest itemCartRequest,
+            @RequestParam(required = false) String filterByCategoryName,
+            @RequestParam(required = false) String filterByBrandName){
+
+        PaginationResponse<ItemResponse> items = itemHandler.getItemsPaginatedById(page, size, ord, sortBy , itemCartRequest.getItemIds(), filterByCategoryName, filterByBrandName);
+
+
+        return ResponseEntity.ok(items);
+    }
+
+    @GetMapping("/price/{itemId}")
+    public ResponseEntity<BigDecimal> getPriceById(@PathVariable Long itemId){
+        return ResponseEntity.ok(itemHandler.getPriceById(itemId));
+    }
+
+    @PreAuthorize(RolePermissionConstants.HAS_ROLE_CLIENT)
+    @PatchMapping("/stock/sale/{itemId}")
+    public ResponseEntity<Void> sellItem(@PathVariable Long itemId, @RequestBody AddStock addStock){
+        itemHandler.sellItem(itemId, addStock);
+        return ResponseEntity.ok().build();
     }
 
 }
