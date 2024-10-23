@@ -13,6 +13,7 @@ import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -75,5 +76,22 @@ public class ItemHandler implements IItemHandler{
     @Override
     public List<String> getCategories(Long itemId) {
         return itemServicePort.getCategories(itemId);
+    }
+
+    @Override
+    public PaginationResponse<ItemResponse> getItemsPaginatedById(Integer page, Integer size, Boolean ord,String sortBy, List<Long> itemIds, String filterByCategoryName, String filterByBrandName) {
+        PaginationCustom<Item> itemPaginationCustom = itemServicePort.getItemsPaginatedById(page, size, ord,sortBy, itemIds, filterByCategoryName, filterByBrandName);
+
+        return paginationResponseMapper.toItemPaginationResponse(itemPaginationCustom);
+    }
+
+    @Override
+    public BigDecimal getPriceById(Long itemId) {
+        return itemServicePort.getPriceById(itemId);
+    }
+
+    @Override
+    public void sellItem(Long itemId, AddStock addStock) {
+        itemServicePort.sellItem(itemId, addStock.getQuantity());
     }
 }

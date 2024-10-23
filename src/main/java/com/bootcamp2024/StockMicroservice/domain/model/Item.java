@@ -8,14 +8,14 @@ public class Item {
     private String name;
     private String description;
     private BigDecimal price;
-    private Long stock;
+    private Integer stock;
     private Brand brand;
     private List<Category> categories;
 
     public Item() {
     }
 
-    public Item(Long id, String name, String description, BigDecimal price, Long stock, Brand brand, List<Category> categories) {
+    public Item(Long id, String name, String description, BigDecimal price, Integer stock, Brand brand, List<Category> categories) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -57,11 +57,11 @@ public class Item {
         this.price = price;
     }
 
-    public Long getStock() {
+    public Integer getStock() {
         return stock;
     }
 
-    public void setStock(Long stock) {
+    public void setStock(Integer stock) {
         this.stock = stock;
     }
 

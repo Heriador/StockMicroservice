@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -64,10 +65,22 @@ public class ItemAdapter implements IItemPersistencePort {
 
         Page<ItemEntity> itemEntityPage = itemRepository.findAll(pageable);
 
-
+        System.out.println(itemEntityPage.getSize());
         PaginationCustom<Item> itemPaginationCustom = paginationMapper.toItemPaginationCustom(itemEntityPage);
 
 
+
+        return Optional.of(itemPaginationCustom);
+    }
+
+    @Override
+    public Optional<PaginationCustom<Item>> getItemsPaginatedById(Integer page, Integer size, Boolean ord, String sortBy, List<Long> itemIds, String filterByCategoryName, String filterByBrandName) {
+
+        Sort sort = Boolean.TRUE.equals(ord) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<ItemEntity> itemEntityPage = itemRepository.findAllByIdInAndFilters(itemIds,filterByBrandName, filterByCategoryName ,pageable);
+        PaginationCustom<Item> itemPaginationCustom = paginationMapper.toItemPaginationCustom(itemEntityPage);
 
         return Optional.of(itemPaginationCustom);
     }
