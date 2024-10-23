@@ -3,6 +3,7 @@ package com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.adapters;
 import com.bootcamp2024.StockMicroservice.domain.model.Item;
 import com.bootcamp2024.StockMicroservice.domain.model.PaginationCustom;
 import com.bootcamp2024.StockMicroservice.domain.spi.IItemPersistencePort;
+import com.bootcamp2024.StockMicroservice.domain.util.SortBy;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.IItemEntityMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.Mapper.PaginationMapper;
 import com.bootcamp2024.StockMicroservice.infrastructure.output.mysql.entity.ItemEntity;
@@ -58,14 +59,30 @@ public class ItemAdapter implements IItemPersistencePort {
     @Override
     public Optional<PaginationCustom<Item>> getAllItems(int page, int size, String sortParam, boolean ord) {
 
-        sortParam = sortParam.contains("name") ? "name" : sortParam.concat(".name");
-        Sort sort = ord ? Sort.by(sortParam).ascending() : Sort.by(sortParam).descending();
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ItemEntity> itemEntityPage;
 
-        Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<ItemEntity> itemEntityPage = itemRepository.findAll(pageable);
+        if(SortBy.CATEGORY.getFieldName().equalsIgnoreCase(sortParam)){
+            itemEntityPage = ord ?
+                          itemRepository.findAllOrderByCategoryCountAsc(pageable)
+                        : itemRepository.findAllOrderByCategoryCountDesc(pageable);
+        }
+        else if(SortBy.NAME.getFieldName().equalsIgnoreCase(sortParam)){
+            itemEntityPage = ord ?
+                          itemRepository.findAllOrderByNameAsc(pageable)
+                        : itemRepository.findAllOrderByNameDesc(pageable);
 
-        System.out.println(itemEntityPage.getSize());
+        }
+        else if(SortBy.BRAND.getFieldName().equalsIgnoreCase(sortParam)){
+            itemEntityPage = ord ?
+                          itemRepository.findAllOrderByBrandCountAsc(pageable)
+                        : itemRepository.findAllOrderByBrandCountDesc(pageable);
+        }
+        else{
+            itemEntityPage = itemRepository.findAll(pageable);
+        }
+
         PaginationCustom<Item> itemPaginationCustom = paginationMapper.toItemPaginationCustom(itemEntityPage);
 
 
