@@ -135,8 +135,8 @@ public class ItemRestController {
             @RequestParam(defaultValue = "true") Boolean ord,
             @RequestParam(defaultValue = "name") String sortBy,
             @RequestBody ItemCartRequest itemCartRequest,
-            @RequestParam(required = false) String filterByCategoryName,
-            @RequestParam(required = false) String filterByBrandName){
+            @RequestParam(required = false, defaultValue = "") String filterByCategoryName,
+            @RequestParam(required = false, defaultValue = "") String filterByBrandName){
 
         PaginationResponse<ItemResponse> items = itemHandler.getItemsPaginatedById(page, size, ord, sortBy , itemCartRequest.getItemIds(), filterByCategoryName, filterByBrandName);
 

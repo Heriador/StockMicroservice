@@ -44,6 +44,17 @@ public interface IItemRepository extends JpaRepository<ItemEntity, Long> {
                                              @Param("categoryName") String categoryName,
                                              Pageable pageable);
 
+    @Query("SELECT i FROM ItemEntity i WHERE i.id IN :itemIds")
+    Page<ItemEntity> findAllByIdIn(List<Long> itemIds, Pageable pageable);
+
+    @Query("SELECT i FROM ItemEntity i JOIN i.brand b WHERE i.id IN :itemIds AND b.name = :brandName")
+    Page<ItemEntity> findAllByIdInAndFilterByBrandName(List<Long> itemIds, String brandName, Pageable pageable);
+
+    @Query("SELECT i FROM ItemEntity i JOIN i.categories c WHERE i.id IN :itemIds AND c.name = :categoryName")
+    Page<ItemEntity> findAllByIdInAndFilterByCategoryName(List<Long> itemIds, String categoryName, Pageable pageable);
+
+    @Query("SELECT i FROM ItemEntity i JOIN i.brand b JOIN i.categories c WHERE i.id IN :itemIds AND b.name = :brandName AND c.name = :categoryName")
+    Page<ItemEntity> findAllByIdInAndFilterByBrandNameAndCategoryName(List<Long> itemIds, String brandName, String categoryName, Pageable pageable);
 
 
 }

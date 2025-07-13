@@ -96,7 +96,20 @@ public class ItemAdapter implements IItemPersistencePort {
         Sort sort = Boolean.TRUE.equals(ord) ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<ItemEntity> itemEntityPage = itemRepository.findAllByIdInAndFilters(itemIds,filterByBrandName, filterByCategoryName ,pageable);
+        Page<ItemEntity> itemEntityPage;
+
+        if(!filterByBrandName.isEmpty() && !filterByCategoryName.isEmpty()){
+            itemEntityPage = itemRepository.findAllByIdInAndFilterByBrandNameAndCategoryName(itemIds, filterByBrandName, filterByCategoryName, pageable);
+        }
+        else if(!filterByCategoryName.isEmpty()){
+            itemEntityPage = itemRepository.findAllByIdInAndFilterByCategoryName(itemIds, filterByCategoryName, pageable);
+        }
+        else if(!filterByBrandName.isEmpty()){
+            itemEntityPage = itemRepository.findAllByIdInAndFilterByBrandName(itemIds, filterByBrandName, pageable);
+        }
+        else{
+            itemEntityPage = itemRepository.findAllByIdIn(itemIds, pageable);
+        }
         PaginationCustom<Item> itemPaginationCustom = paginationMapper.toItemPaginationCustom(itemEntityPage);
 
         return Optional.of(itemPaginationCustom);
